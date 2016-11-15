@@ -1,45 +1,57 @@
 
-# http://stackoverflow.com/questions/12590180/inflation-adjusted-prices-package
 
-
-
+#' Calculate Inflation Adjusted Costs
+#'
+#' Use ONS GDP_Deflators_Qtrly_National_Accounts
+#'
+#' @param from_date
+#' @param to_date
+#' @param from_cost
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' from_year <- 2012
+#' to_year <- 2015
+#' from_cost <- 96.140
+#'
+#' inflation_adjust_cost(from_date, to_date, from_cost)
+#'
 inflation_adjust_cost <- function(from_date, to_date, from_cost){
 
-  library(readr)
-
   ##TODO##
-  #     #Load file from BLS servers
-  #     temp<-tempfile()
-  #     download.file("http://download.bls.gov/pub/time.series/cu/cu.data.1.AllItems",temp)
-  #     cu_main<-read.table(temp,
-  #                         header=FALSE,
-  #                         sep="t",
-  #                         skip=1,
-  #                         stringsAsFactors=FALSE,
-  #                         strip.white=TRUE)
-  #     colnames(cu_main)<-c("series_id", "year", "period", "value", "footnote_codes")
-  #     unlink(temp)
-
-
+  # this file is too messy to use as raw data
+  # temp <- tempfile()
+  # ##TODO##
+  # # how to always use the latest?
+  # download.file("https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/562750/GDP_Deflators_Qtrly_National_Accounts_September_2016_update_v2.csv", temp)
+  # deflators <- read_csv(temp)
+  # unlink(temp)
 
   deflators <- read_csv("C:/Users/Nathan/Dropbox/TB/LTBI/data/GDP_Deflators_09_2016.csv")
 
   from_row <- which(deflators$`Calendar year`==from_year)
   to_row <- which(deflators$`Calendar year`==to_year)
 
-  deflators$`per cent change from following year` <-
+  deflators$prop_change_previous_year <- deflators$`per cent change on previous year`/100
 
   to_cost <- from_cost
 
-  for (i in 0:2){
+  num_years <- to_row - from_row
 
-    to_cost <- to_cost/(1 + deflators$`per cent change on previous year`[from_row-i]/100)
+  for (i in seq_len(num_years)){
+
+    to_cost <- to_cost + (to_cost * deflators$prop_change_previous_year[from_row + i])
   }
 
+  return(to_cost)
 }
 
 
 
+# other peoples related code
+# http://stackoverflow.com/questions/12590180/inflation-adjusted-prices-package
 
 
 #
