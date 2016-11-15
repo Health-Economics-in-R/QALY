@@ -1,12 +1,13 @@
 
-
 #' Calculate Inflation Adjusted Costs
 #'
 #' Use ONS GDP_Deflators_Qtrly_National_Accounts
+#' Can't download directly into function because the csv on the website is too messy as-is.
+#' This would be good to do though so that can always use latest version.
 #'
-#' @param from_date
-#' @param to_date
-#' @param from_cost
+#' @param from_date date of cost to convert
+#' @param to_date date to convert cost to
+#' @param from_cost cost at \code{from_date}
 #'
 #' @return
 #' @export
