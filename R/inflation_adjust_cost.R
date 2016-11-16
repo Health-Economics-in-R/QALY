@@ -18,6 +18,7 @@
 #' from_cost <- 96.140
 #'
 #' inflation_adjust_cost(from_date, to_date, from_cost)
+#' #100
 #'
 inflation_adjust_cost <- function(from_date, to_date, from_cost){
 
@@ -29,6 +30,10 @@ inflation_adjust_cost <- function(from_date, to_date, from_cost){
   # download.file("https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/562750/GDP_Deflators_Qtrly_National_Accounts_September_2016_update_v2.csv", temp)
   # deflators <- read_csv(temp)
   # unlink(temp)
+
+  if(!is.integer(from_date)) stop("From date must be an integer valued whole year")
+  if(!is.integer(to_date)) stop("To date must be an integer valued whole year")
+  if(from_cost<0) stop("Cost must be greater than 0")
 
   deflators <- read_csv("C:/Users/Nathan/Dropbox/TB/LTBI/data/GDP_Deflators_09_2016.csv")
 
