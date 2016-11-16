@@ -1,20 +1,4 @@
 
-#' Make an Encapsulated Discount Function
-#'
-#' This format don't need to keep track of i.
-#'
-#' @return
-#' @export
-#'
-#' @examples
-#'
-make_discount <- function(){
-  i <- 0
-  function(){
-    i <<- i + 1
-    return(min(treeSimR::discount(t = i)))
-  }
-}
 
 
 #' Calculate QALYs using Case-Fatality Rates

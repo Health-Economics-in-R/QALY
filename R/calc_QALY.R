@@ -16,6 +16,7 @@ calc_QALY <- function(utility = 0.9,
                       time_horizon = NA){
 
   if(is.na(time_horizon) | length(utility) > time_horizon) time_horizon <- length(utility)
+
   utility <- fillin_missing_utilities(utility, time_horizon)
 
   QALY <- 0

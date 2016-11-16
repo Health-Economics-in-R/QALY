@@ -5,8 +5,8 @@
 #' Can't download directly into function because the csv on the website is too messy as-is.
 #' This would be good to do though so that can always use latest version.
 #'
-#' @param from_date date of cost to convert
-#' @param to_date date to convert cost to
+#' @param from_year date of cost to convert
+#' @param to_year date to convert cost to
 #' @param from_cost cost at \code{from_date}
 #'
 #' @return
@@ -17,10 +17,10 @@
 #' to_year <- 2015
 #' from_cost <- 96.140
 #'
-#' inflation_adjust_cost(from_date, to_date, from_cost)
+#' inflation_adjust_cost(from_year, to_year, from_cost)
 #' #100
 #'
-inflation_adjust_cost <- function(from_date, to_date, from_cost){
+inflation_adjust_cost <- function(from_year, to_year, from_cost){
 
   ##TODO##
   # this file is too messy to use as raw data
@@ -31,11 +31,11 @@ inflation_adjust_cost <- function(from_date, to_date, from_cost){
   # deflators <- read_csv(temp)
   # unlink(temp)
 
-  if(!is.integer(from_date)) stop("From date must be an integer valued whole year")
-  if(!is.integer(to_date)) stop("To date must be an integer valued whole year")
+  if(from_year%%1!=0) stop("From date must be an integer valued whole year")
+  if(to_year%%1!=0) stop("To date must be an integer valued whole year")
   if(from_cost<0) stop("Cost must be greater than 0")
 
-  deflators <- read_csv("C:/Users/Nathan/Dropbox/TB/LTBI/data/GDP_Deflators_09_2016.csv")
+  deflators <- readr::read_csv("C:/Users/Nathan/Dropbox/TB/LTBI/data/inflation/GDP_Deflators_09_2016.csv")
 
   from_row <- which(deflators$`Calendar year`==from_year)
   to_row <- which(deflators$`Calendar year`==to_year)

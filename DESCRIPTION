@@ -1,6 +1,6 @@
 Package: QALY
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Calculate QALY Gains with Discounting and Inflated Costs
 Version: 0.1.0
 Author: Nathan Green
 Maintainer: Nathan Green <nathan.green@imperial.ac.uk>
@@ -11,4 +11,6 @@ Encoding: UTF-8
 LazyData: true
 Imports:
     readr
-Suggests: testthat
+Suggests:
+    testthat
+RoxygenNote: 5.0.1
