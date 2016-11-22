@@ -7,7 +7,7 @@
 #'
 #' @param from_year date of cost to convert
 #' @param to_year date to convert cost to
-#' @param from_cost cost at \code{from_date}
+#' @param from_cost cost at \code{from_year}
 #'
 #' @return
 #' @export
@@ -35,7 +35,8 @@ inflation_adjust_cost <- function(from_year, to_year, from_cost){
   if(to_year%%1!=0) stop("To date must be an integer valued whole year")
   if(from_cost<0) stop("Cost must be greater than 0")
 
-  deflators <- readr::read_csv("C:/Users/Nathan/Dropbox/TB/LTBI/data/inflation/GDP_Deflators_09_2016.csv")
+  deflators <- readr::read_csv("C:/Users/Nathan/Dropbox/TB/LTBI/data/inflation/GDP_Deflators_09_2016.csv",
+                               col_types = list(col_integer(), col_double(), col_double()))
 
   from_row <- which(deflators$`Calendar year`==from_year)
   to_row <- which(deflators$`Calendar year`==to_year)
