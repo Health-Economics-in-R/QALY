@@ -19,7 +19,7 @@
 #'
 #' AdjLifeYears <- adjusted_life_years(
 #'                     start_year = 2016,
-#'                     end_year = 2020,
+#'                     end_year = 2020,l
 #'                     age = NA,
 #'                     time_horizon = NA,
 #'                     utility = 0.9,

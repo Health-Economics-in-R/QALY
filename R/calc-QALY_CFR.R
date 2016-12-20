@@ -79,7 +79,7 @@ calc_QALY_CFR <- function(AGES = NA,
       if(!is.null(time_horizon)) ltime <- ifelse(count<time_horizon, 1, 0.5)
 
       QALY[popi] <- QALY[popi] + (ltime * utility * discountfactor())
-      age <- age + 1
+      agei <- agei + 1
       count <- count + 1
     }
   }
