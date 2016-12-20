@@ -7,7 +7,7 @@
 #' @param end_year Calendar year to end calculation
 #' @param age Age at start of period
 #' @param time_horizon Number of time periods from start to end date
-#' @param utilities Proportion health detriment
+#' @param utility Proportion health detriment
 #' @param discount_rate Fixed proportion reduction over time
 #'
 #' @return Object of class adjusted_life_years
@@ -17,18 +17,25 @@
 #'
 #' @examples
 #'
-#' adjusted_life_years(start_year = 2016,
+#' AdjLifeYears <- adjusted_life_years(
+#'                     start_year = 2016,
 #'                     end_year = 2020,
 #'                     age = NA,
 #'                     time_horizon = NA,
-#'                     utilities = 0.9,
+#'                     utility = 0.9,
 #'                     discount_rate = 0.035)
+#'
+#' total_QALYs(AdjLifeYears)
+#' ## 2.913622
+#'
+#' total_QALY(1)
+#' ## "Error: Not an adjusted_life_years class input object."
 #'
 adjusted_life_years <- function(start_year = 0,
                                 end_year = NA,
                                 age = NA,
                                 time_horizon = NA,
-                                utilities,
+                                utility,
                                 discount_rate = 0.035){
 
   if(start_year<0) stop("Start year must be non-negative.")
@@ -40,8 +47,8 @@ adjusted_life_years <- function(start_year = 0,
   # if(!is.na(start_year)) start_year <- floor(start_year)
   # if(!is.na(end_year)) end_year <- floor(end_year)
 
-  if(any(utilities>1) | any(utilities<0)){
-    stop("Utilities must be between 0 and 1.")
+  if(any(utility>1) | any(utility<0)){
+    stop("utility must be between 0 and 1.")
   }
 
   if(any(discount_rate>1) | any(discount_rate<0)){
@@ -76,7 +83,7 @@ adjusted_life_years <- function(start_year = 0,
                               end_year = end_year,
                               age = age,
                               time_horizon = time_horizon,
-                              utilities = utilities,
+                              utility = utility,
                               discount_rate = discount_rate)
 
   class(adjusted_life_years) <- c("adjusted_life_years", class(adjusted_life_years))
