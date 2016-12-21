@@ -84,7 +84,8 @@ adjusted_life_years <- function(start_year = 0,
                               age = age,
                               time_horizon = time_horizon,
                               utility = utility,
-                              discount_rate = discount_rate)
+                              discount_rate = discount_rate,
+                              death = NA)
 
   class(adjusted_life_years) <- c("adjusted_life_years", class(adjusted_life_years))
 
