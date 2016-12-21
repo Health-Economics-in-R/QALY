@@ -30,7 +30,7 @@ total_QALYs.default <- function(adjusted_life_years) print("Error: Not an adjust
 #'
 total_QALYs.adjusted_life_years <- function(adjusted_life_years){
 
-  QALYs <- 0
+  QoL <- numeric()
   discountfactor <- make_discount(adjusted_life_years$discount_rate)
 
   # assume half final year
@@ -38,8 +38,13 @@ total_QALYs.adjusted_life_years <- function(adjusted_life_years){
 
   for(yeari in seq_along(adjusted_life_years$utility)){
 
-    QALYs <- QALYs + (period[yeari] * adjusted_life_years$utility[yeari] * discountfactor())
+    QoL <- c(QoL, period[yeari] * adjusted_life_years$utility[yeari] * discountfactor())
   }
+
+  QALYs <- sum(QoL)
+  attr(QALYs, "QoL") <- QoL
+  attr(QALYs, "adjusted_life_years") <- adjusted_life_years
+  class(QALYs) <- c("QALY", class(QALYs))
 
   return(QALYs)
 }
