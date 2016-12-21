@@ -33,20 +33,25 @@ CFR_time_horizon.adjusted_life_years <- function(adjusted_life_years, cfr_modelf
   age_name <- attr(x, "names")[2]
 
   agei <- adjusted_life_years$age
+  death_date <- 0
 
-  while(ltime%%1==0){
+  while(death_date%%1==0){
 
     cfr_subset <- subset(x = cfr_modelframe,
                          subset = age_name==agei,
                          select = cfr_name)
 
-    ltime <- ltime + ifelse(cfr_subset < runif(1), 1, 0.5)
+    death_date <- death_date + ifelse(cfr_subset < runif(1), 1, 0.5)
 
     agei <- agei + 1
   }
 
-
   adjusted_life_years$time_horizon <- min(adjusted_life_years$time_horizon, death_date)
+
+  adjusted_life_years$utility <- fillin_missing_utilities(adjusted_life_years$utility,
+                                                          adjusted_life_years$time_horizon)
+
+  adjusted_life_years$death <- TRUE
 
   return(adjusted_life_years)
 }
