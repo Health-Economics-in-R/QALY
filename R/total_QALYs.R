@@ -25,7 +25,7 @@ total_QALYs.default <- function(adjusted_life_years) print("Error: Not an adjust
 #' total_QALYs(AdjLifeYears)
 #' ## 2.913622
 #'
-#' total_QALY(1)
+#' total_QALYs(1)
 #' ## "Error: Not an adjusted_life_years class input object."
 #'
 total_QALYs.adjusted_life_years <- function(adjusted_life_years){

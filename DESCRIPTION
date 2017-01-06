@@ -4,13 +4,13 @@ Title: Calculate QALY Gains with Discounting and Inflated Costs
 Version: 0.1.0
 Author: Nathan Green
 Maintainer: Nathan Green <nathan.green@imperial.ac.uk>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: S3 package for QALY calculation and plotting.
 License: MIT
 Encoding: UTF-8
 LazyData: true
 Imports:
-    readr
+    readr,
+    datapkg
 Suggests:
     testthat
 RoxygenNote: 5.0.1
