@@ -5,9 +5,10 @@
 #' Can't download directly into function because the csv on the website is too messy as-is.
 #' This would be good to do though so that can always use latest version.
 #'
-#' @param from_year date of cost to convert
-#' @param to_year date to convert cost to
-#' @param from_cost cost at \code{from_year}
+#' @param from_year Date of cost to convert
+#' @param to_year Date to convert cost to
+#' @param from_cost Cost at \code{from_year}
+#' @param reference Source of data
 #'
 #' @return
 #' @export
@@ -20,7 +21,7 @@
 #' inflation_adjust_cost(from_year, to_year, from_cost)
 #' #100
 #'
-inflation_adjust_cost <- function(from_year, to_year, from_cost){
+inflation_adjust_cost <- function(from_year, to_year, from_cost, reference = NA){
 
   ##TODO##
   # the webpage defaltor file is too messy- with comments etc- to use as raw data
@@ -51,6 +52,11 @@ inflation_adjust_cost <- function(from_year, to_year, from_cost){
 
     to_cost <- to_cost + (to_cost * deflators$prop_change_previous_year[from_row + yeari])
   }
+
+  attr(to_cost, "from_year") <- from_year
+  attr(to_cost, "to_year") <- to_year
+  attr(to_cost, "from_cost") <- from_cost
+  attr(to_cost, "reference") <- reference
 
   return(to_cost)
 }
