@@ -1,15 +1,19 @@
 
-#' Calculate Quality-Adjusted Life Years
+#' @title Calculate Quality-Adjusted Life Years
 #'
-#' Discounted total QALYs upto a defined time horizon,
-#' using the following formula:
+#' Discounted total QALYs upto a defined time horizon.
+#'
+#' @details Uses the following formula:
 #'
 #' \deqn{ \sum prop_year(year=i) * utility(year=i) * discount_factor(year=i) }
 #'
 #' for i = 1, ..., \code{time_horizon}.
 #'
-#' @param utility Vector of values between 0 and 1
-#' @param time_horizon Non-negative value
+#' \code{prop_year} is useful for fractions of years at the start and end of the period.
+#' However, since we may not know this then may not be necessary.
+#'
+#' @param utility Vector of values between 0 and 1 (1 - utility loss)
+#' @param time_horizon Non-negative value how many time step into future as sum limit
 #'
 #' @return
 #' @export
@@ -24,21 +28,23 @@
 calc_QALY <- function(utility = 0.9,
                       time_horizon = NA){
 
-  if(is.na(time_horizon) | length(utility) > time_horizon){
+  if (time_horizon==0) return(0)
+
+  if (is.na(time_horizon) | length(utility) > time_horizon){
 
     time_horizon <- length(utility)
   }
 
   QALY <- 0
 
-  utility <- fillin_missing_utilities(utility, time_horizon)
+  utility <- QALY::fillin_missing_utilities(utility, time_horizon)
 
-  discountfactor <- make_discount()
+  discountfactor <- QALY::make_discount()
 
   # assume half final year
   period <- c(rep(1, time_horizon - 1), 0.5)
 
-  for(yeari in seq_along(utility)){
+  for (yeari in seq_along(utility)){
 
     QALY <- QALY + (period[yeari] * utility[yeari] * discountfactor())
   }
@@ -57,7 +63,7 @@ calc_QALY <- function(utility = 0.9,
 #' @param utility Vector of utilities for each year in to the future, between 0 and 1
 #' @param time_horizons Vector of non-negative durations
 #'
-#' @return
+#' @return QALY
 #' @export
 #' @seealso \code{\link{calc_QALY_CFR}},
 #'          \code{\link{calc_QALY}}

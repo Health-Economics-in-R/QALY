@@ -1,5 +1,5 @@
 
-##TODO##
+##TODO: plot functions aren't finished
 
 plot_lexis.adjusted_life_years <- function(adjusted_life_years){
 

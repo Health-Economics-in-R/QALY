@@ -1,11 +1,12 @@
 
-#' Discounted Values Over Time
+#' @title Discounted Values Over Time
 #'
-#' Dscounted value, e.g. cost or health (QALY), for each time point, e.g. year.
+#' @description Dscounted value, e.g. cost or health (QALY), for each time point, e.g. year.
 #' E.g. a QALY in the future is worth less to us now because of 'interest'
 #' or conversely we'd need more QALYs now to have a QALY further in the future.
 #'
-#' \deqn{ 1/(1 + discount_rate)^#years}
+#' @details Formula used is
+#'  \deqn{ 1/(1 + discount_rate)^#years}
 #'
 #' @param discount_rate Discount factor, default at 3.5\%
 #' @param t_limit Time period (positive integer) to discount over starting from 1
@@ -17,7 +18,7 @@
 #' Severens, Johan L and Milne, Richard J,
 #' Value in Health, 4, Discounting Health Outcomes in Economic Evaluation : The Ongoing Debate,
 #' volume 7, 2004
-#' @bibliography QALY.bib ##TODO##
+#' @bibliography QALY.bib ##TODO: import .bib file
 #'
 #' @examples
 #'
@@ -52,13 +53,13 @@ discount <- function(discount_rate = 0.035,
 }
 
 
-#' Make an Encapsulated Discount Function
+#' @title Make an Encapsulated Discount Function
 #'
-#' This format doesn't need to keep track of time.
+#' @description This format doesn't need to keep track of time.
 #'
 #' @param discount_rate Discount factor, default at 3.5\%
 #'
-#' @return
+#' @return Function with global scoped index
 #' @export
 #'
 #' @examples
