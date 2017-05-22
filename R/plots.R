@@ -30,7 +30,6 @@ plot_lexis.adjusted_life_years <- function(adjusted_life_years){
 #'
 plot_QALY <- function(QALYs, add = FALSE){
 
-
   QoLs <- attr(QALYs, "QoL")
 
   # append final year
@@ -38,7 +37,8 @@ plot_QALY <- function(QALYs, add = FALSE){
 
   par(new != add)
 
-  plot(seq_along(QoLs)-1, QoLs, type = "s",
+  plot(x = seq_along(QoLs) - 1, y = QoLs,
+       type = "s",
        ylim = c(0, 1),
        ylab = "Health-related quality of life", xlab = "Time")
 }

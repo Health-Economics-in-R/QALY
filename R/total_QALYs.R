@@ -5,7 +5,7 @@ total_QALYs <- function(adjusted_life_years) UseMethod("total_QALYs")
 total_QALYs.default <- function(adjusted_life_years) print("Error: Not an adjusted_life_years class input object.")
 
 
-#' Calculate QALYs
+#' Calculate Life-Time QALYs
 #'
 #' @param adjusted_life_years Object of class adjusted_life_years
 #'
@@ -36,7 +36,7 @@ total_QALYs.adjusted_life_years <- function(adjusted_life_years){
   # assume half final year
   period <- c(rep(1, adjusted_life_years$time_horizon - 1), 0.5)
 
-  for(yeari in seq_along(adjusted_life_years$utility)){
+  for (yeari in seq_along(adjusted_life_years$utility)) {
 
     QoL <- c(QoL, period[yeari] * adjusted_life_years$utility[yeari] * discountfactor())
   }

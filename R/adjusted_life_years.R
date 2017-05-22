@@ -19,7 +19,7 @@
 #'
 #' AdjLifeYears <- adjusted_life_years(
 #'                     start_year = 2016,
-#'                     end_year = 2020,l
+#'                     end_year = 2020,
 #'                     age = NA,
 #'                     time_horizon = NA,
 #'                     utility = 0.9,
@@ -38,41 +38,40 @@ adjusted_life_years <- function(start_year = 0,
                                 utility,
                                 discount_rate = 0.035){
 
-  if(start_year<0) stop("Start year must be non-negative.")
-  if(!is.na(end_year) & end_year<0) stop("End year must be non-negative.")
-  if(!is.na(time_horizon) & time_horizon<0) stop("Time horizon must be non-negative.")
+  if (start_year < 0) stop("Start year must be non-negative.")
+  if (!is.na(end_year) & end_year < 0) stop("End year must be non-negative.")
+  if (!is.na(time_horizon) & time_horizon < 0) stop("Time horizon must be non-negative.")
 
-  if(!is.na(age) & age<0) stop("Age must be non-negative.")
+  if (!is.na(age) & age < 0) stop("Age must be non-negative.")
 
   # if(!is.na(start_year)) start_year <- floor(start_year)
   # if(!is.na(end_year)) end_year <- floor(end_year)
 
-  if(any(utility>1) | any(utility<0)){
+  if (any(utility > 1) | any(utility < 0)) {
     stop("utility must be between 0 and 1.")
   }
 
-  if(any(discount_rate>1) | any(discount_rate<0)){
+  if (any(discount_rate > 1) | any(discount_rate < 0)) {
     stop("Discount factors must be between 0 and 1.")
   }
 
-  if(is.na(time_horizon) & is.na(end_year)){
+  if (is.na(time_horizon) & is.na(end_year)) {
     stop("Require a time horizon or end date.")
   }
 
-  if(is.na(start_year) & !is.na(end_year)){
+  if (is.na(start_year) & !is.na(end_year)) {
     warning("Are you sure you don't want to specify a start date?")
   }
 
-  if(!is.na(start_year) & !is.na(time_horizon) & is.na(end_year)){
+  if (!is.na(start_year) & !is.na(time_horizon) & is.na(end_year)) {
     end_year <- start_year + time_horizon
   }
 
-  if(!is.na(start_year) & !is.na(end_year) & is.na(time_horizon)){
+  if (!is.na(start_year) & !is.na(end_year) & is.na(time_horizon)) {
     time_horizon <- end_year - start_year
   }
 
-
-  if(is.na(time_horizon) | length(utility) > time_horizon){
+  if (is.na(time_horizon) | length(utility) > time_horizon) {
     time_horizon <- length(utility)
   }
 

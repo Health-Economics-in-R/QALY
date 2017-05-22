@@ -1,10 +1,10 @@
 
 #' Calculate Inflation Adjusted Costs
 #'
-#' up to the present time inflated upwards.
+#' Up to the present time inflated upwards.
 #' Option to use the ONS GDP_Deflators_Qtrly_National_Accounts or
 #' a fixed 3.5\%.
-#' Can't download directly into function because the csv on the website is too messy as-is.
+#' Can't download directly into function because the .csv on the website is too messy as-is.
 #' This would be good to do though so that can always use latest version.
 #' TODO: webscraping? regular expressions?
 #'
@@ -25,7 +25,7 @@
 #' inflation_adjust_cost(from_year, to_year, from_cost, fixed = FALSE)
 #' #100
 #'
-#' inflation_adjust_cost(from_year=2010, to_year=2016, from_cost=1)
+#' inflation_adjust_cost(from_year = 2010, to_year = 2016, from_cost = 1)
 #' #1.229255
 #' 1*(1+0.035)^6
 #'
@@ -51,8 +51,8 @@ inflation_adjust_cost <- function(from_year,
   datapkg_data <- datapkg::datapkg_read(DEFLATORS_FILES)
   deflators <- datapkg_data$data$deflators
 
-  from_row <- which(deflators$`Calendar year`==from_year)
-  to_row <- which(deflators$`Calendar year`==to_year)
+  from_row <- which(deflators$`Calendar year` == from_year)
+  to_row <- which(deflators$`Calendar year` == to_year)
 
   if (fixed){
     deflators$prop_change_previous_year <- 0.035
