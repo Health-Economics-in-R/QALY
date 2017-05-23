@@ -20,7 +20,7 @@
 #' AdjLifeYears <- adjusted_life_years(
 #'                     start_year = 2016,
 #'                     end_year = 2020,
-#'                     age = NA,
+#'                     age = 33,
 #'                     time_horizon = NA,
 #'                     utility = 0.9,
 #'                     discount_rate = 0.035)
@@ -77,12 +77,29 @@ adjusted_life_years <- function(start_year = 0,
 
   utility <- fillin_missing_utilities(utility, time_horizon)
 
+  if (is.na(age)) { #age-dependent Quality of Life
+    QoL <- rep(1, time_horizon)
+  }else{
+
+    ages <-  cut(x = age + 0:time_horizon,
+                 breaks = c(-1, Kind1998_agegroups_QoL$max_age))
+
+    Kind1998_agegroups_QoL$cut_intervals <- cut(x = Kind1998_agegroups_QoL$max_age,
+                                                breaks = c(-1, Kind1998_agegroups_QoL$max_age))
+
+    QoL <-
+      left_join(x = data.frame("cut_intervals" = ages),
+                y = Kind1998_agegroups_QoL,
+                by = "cut_intervals") %>%
+      select(QoL) %>% unlist() %>% unname()
+  }
 
   adjusted_life_years <- list(start_year = start_year,
                               end_year = end_year,
                               age = age,
                               time_horizon = time_horizon,
                               utility = utility,
+                              QoL = QoL,
                               discount_rate = discount_rate,
                               death = NA)
 
