@@ -7,9 +7,9 @@ total_QALYs.default <- function(adjusted_life_years) print("Error: Not an adjust
 
 #' Calculate Life-Time QALYs
 #'
-#' @param adjusted_life_years Object of class adjusted_life_years
+#' @param adjusted_life_years Object of class \code{adjusted_life_years}
 #'
-#' @return QALYs
+#' @return QALYs object
 #' @export
 #'
 #' @examples
@@ -28,22 +28,28 @@ total_QALYs.default <- function(adjusted_life_years) print("Error: Not an adjust
 #' total_QALYs(1)
 #' ## "Error: Not an adjusted_life_years class input object."
 #'
-total_QALYs.adjusted_life_years <- function(adjusted_life_years){
+total_QALYs.adjusted_life_years <- function(adj_years){
 
-  QoL <- numeric()
-  discountfactor <- make_discount(adjusted_life_years$discount_rate)
+  yearly_QALYs <- numeric()
 
-  # assume half final year
-  period <- c(rep(1, adjusted_life_years$time_horizon - 1), 0.5)
+  discountfactor <- make_discount(adj_years$discount_rate)
 
-  for (yeari in seq_along(adjusted_life_years$utility)) {
+  # assume half final year?
+  period <- rep(1, adj_years$time_horizon)
+  # period <- c(rep(1, adj_years$time_horizon - 1), 0.5)
 
-    QoL <- c(QoL, period[yeari] * adjusted_life_years$utility[yeari] * discountfactor())
+  for (i in seq_along(adj_years$utility)) {
+
+    yearly_QALYs <- c(yearly_QALYs,
+                      period[i] * adj_years$utility[i] * adj_years$QoL[i] * discountfactor())
   }
 
-  QALYs <- sum(QoL)
-  attr(QALYs, "QoL") <- QoL
-  attr(QALYs, "adjusted_life_years") <- adjusted_life_years
+  yearly_QALYs <-  c(yearly_QALYs, rep(NA, 100 - length(yearly_QALYs)))
+
+  QALYs <- sum(yearly_QALYs, na.rm = TRUE)
+
+  attr(QALYs, "yearly_QALYs") <- yearly_QALYs
+  attr(QALYs, "adjusted_life_years") <- adj_years
   class(QALYs) <- c("QALY", class(QALYs))
 
   return(QALYs)
