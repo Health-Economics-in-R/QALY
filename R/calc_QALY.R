@@ -2,7 +2,7 @@
 #' @title Calculate Quality-Adjusted Life Years
 #'
 #' @description  Discounted total QALYs upto a defined time horizon.
-#' This is a simple function.
+#' This is a simpler function.
 #' An alternative Method is also available (see \code{\link{total_QALYs}}).
 #'
 #' @details Uses the following formula, for year  \code{i}:
@@ -74,7 +74,7 @@ calc_QALY <- function(utility = NA,
   # don't discount first year
   QALY <- period[1] * utility[1] * QoL[1]
 
-  for (i in seq_along(utility)[-1]) {
+  for (i in seq_along(utility[-1])) {
 
     QALY <- QALY + (period[i] * utility[i] * QoL[i] * discountfactor())
   }
@@ -120,8 +120,8 @@ calc_QALY_population <- function(utility,
 
   for (i in seq_along(time_horizons)) {
 
-    QALY[i] <- calc_QALY(utility,
-                         age,
+    QALY[i] <- calc_QALY(utility = utility,
+                         age = age[i],
                          time_horizon = time_horizons[i])
   }
 

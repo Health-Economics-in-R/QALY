@@ -20,6 +20,9 @@ plot_lexis.adjusted_life_years <- function(adjusted_life_years){
 #'
 #' @param QALYs QALY class object
 #' @param overlay Overlay lines on current plot?
+#' @param XLIM
+#' @param COL
+#' @param age_annotate
 #'
 #' @return
 #' @export
