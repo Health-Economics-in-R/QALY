@@ -31,22 +31,24 @@
 discount <- function(discount_rate = 0.035,
                      t_limit = 100) {
 
-  if(!is.numeric(discount_rate) | !discount_rate >= 0 | !discount_rate <= 1){
+  if (!is.numeric(discount_rate) | !discount_rate >= 0 | !discount_rate <= 1) {
     stop("Discount rate must be number between 0 and 1.")
   }
 
-  if(!is.numeric(t_limit) | !t_limit>0){
+  if (!is.numeric(t_limit) | !t_limit > 0) {
     stop("Time limit must be an integer great than 0.")
   }
 
-  if(!t_limit%%1==0) stop("Time limit must be whole number.")
+  if (!t_limit %% 1 == 0) stop("Time limit must be whole number.")
 
 
   discount_years <- NULL
 
-  for (year in seq_len(t_limit)){
+  discount_years <- 1
 
-    discount_years[year] <- exp(year * (log(1) - log(1 + discount_rate)))
+  for (year in seq_len(t_limit)) {
+
+    discount_years[year] <- exp(-(year - 1) * log(1 + discount_rate))
   }
 
   return(discount_years)
