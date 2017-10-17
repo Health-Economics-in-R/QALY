@@ -1,0 +1,13 @@
+\contentsline {subsection}{adjusted\_life\_years}{2}{page.2}
+\contentsline {subsection}{calc\_QALY}{3}{page.3}
+\contentsline {subsection}{calc\_QALY\_CFR}{4}{page.4}
+\contentsline {subsection}{calc\_QALY\_population}{5}{page.5}
+\contentsline {subsection}{CFR\_time\_horizon.adjusted\_life\_years}{6}{page.6}
+\contentsline {subsection}{discount}{6}{page.6}
+\contentsline {subsection}{fillin\_missing\_utilities}{7}{page.7}
+\contentsline {subsection}{inflation\_adjust\_cost}{8}{page.8}
+\contentsline {subsection}{make\_discount}{8}{page.8}
+\contentsline {subsection}{plot\_QALY}{9}{page.9}
+\contentsline {subsection}{total\_QALYs}{10}{page.10}
+\contentsline {subsection}{total\_QALYs.adjusted\_life\_years}{10}{page.10}
+\contentsline {subsection}{total\_QALYs.default}{11}{page.11}

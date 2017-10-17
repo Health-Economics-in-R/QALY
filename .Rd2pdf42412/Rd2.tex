@@ -1,0 +1,585 @@
+\documentclass[a4paper]{book}
+\usepackage[times,inconsolata,hyper]{Rd}
+\usepackage{makeidx}
+\usepackage[utf8]{inputenc} % @SET ENCODING@
+% \usepackage{graphicx} % @USE GRAPHICX@
+\makeindex{}
+\begin{document}
+\chapter*{}
+\begin{center}
+{\textbf{\huge Package `QALY'}}
+\par\bigskip{\large \today}
+\end{center}
+\begin{description}
+\raggedright{}
+\inputencoding{utf8}
+\item[Type]\AsIs{Package}
+\item[Title]\AsIs{Calculate QALY Gains with Discounting and Inflated Costs}
+\item[Version]\AsIs{0.1.0}
+\item[Author]\AsIs{Nathan Green}
+\item[Maintainer]\AsIs{Nathan Green }\email{nathan.green@imperial.ac.uk}\AsIs{}
+\item[Description]\AsIs{S3 package for QALY calculation and plotting.}
+\item[License]\AsIs{MIT}
+\item[Encoding]\AsIs{UTF-8}
+\item[LazyData]\AsIs{true}
+\item[Imports]\AsIs{readr,
+datapkg}
+\item[Suggests]\AsIs{testthat}
+\item[RoxygenNote]\AsIs{6.0.1}
+\end{description}
+\Rdcontents{\R{} topics documented:}
+\inputencoding{utf8}
+\HeaderA{adjusted\_life\_years}{Adjusted Life Years Object Constructor}{adjusted.Rul.life.Rul.years}
+%
+\begin{Description}\relax
+For use as input to the QALY and DALY functions.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+adjusted_life_years(start_year = 0, end_year = NA, age = NA,
+  time_horizon = NA, utility, discount_rate = 0.035)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{start\_year}] Calendar year to begin calculation
+
+\item[\code{end\_year}] Calendar year to end calculation
+
+\item[\code{age}] Age at start of period
+
+\item[\code{time\_horizon}] Number of time periods from start to end date
+
+\item[\code{utility}] Proportion health detriment
+
+\item[\code{discount\_rate}] Fixed proportion reduction over time
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Object of class adjusted\_life\_years
+\end{Value}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{QALY}{QALY}}, \code{\LinkA{DALY}{DALY}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+AdjLifeYears <- adjusted_life_years(
+                    start_year = 2016,
+                    end_year = 2020,
+                    age = 33,
+                    time_horizon = NA,
+                    utility = 0.9,
+                    discount_rate = 0.035)
+
+total_QALYs(AdjLifeYears)
+## 2.913622
+
+total_QALY(1)
+## "Error: Not an adjusted_life_years class input object."
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{calc\_QALY}{Calculate Quality-Adjusted Life Years}{calc.Rul.QALY}
+%
+\begin{Description}\relax
+Discounted total QALYs upto a defined time horizon.
+This is a simpler function.
+An alternative Method is also available (see \code{\LinkA{total\_QALYs}{total.Rul.QALYs}}).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+calc_QALY(utility = NA, age = NA, time_horizon = NA, halfend = FALSE,
+  start_delay = 0)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{utility}] Vector of values between 0 and 1 (1 - utility loss)
+
+\item[\code{age}] Year of age
+
+\item[\code{time\_horizon}] Non-negative value how many time step into future as sum limit
+
+\item[\code{halfend}] Should the last year be a half year
+
+\item[\code{start\_delay}] What time delay to origin, to shift discounting
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Uses the following formula, for year  \code{i}:
+
+\deqn{ \sum prop_year(i) * utility(i) * QoL(age(i)) * discount_factor(i) }{}
+
+for  \code{i} = 1, ..., \code{time\_horizon}.
+
+\code{prop\_year} is useful for fractions of years at the start and end of the period.
+However, since we may not know this then may not be necessary.
+\end{Details}
+%
+\begin{References}\relax
+Sassi, Franco, Health Policy and Planning, 5, 402-408, Calculating QALYs,
+comparing QALY and DALY calculations, volume 21, 2006
+\end{References}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{calc\_QALY\_CFR}{calc.Rul.QALY.Rul.CFR}},
+\code{\LinkA{calc\_QALY\_population}{calc.Rul.QALY.Rul.population}}
+\code{\LinkA{total\_QALYs}{total.Rul.QALYs}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+calc_QALY(utility = 0.9, age = 13, time_horizon = 49)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{calc\_QALY\_CFR}{Calculate QALYs using Case-Fatality Rates}{calc.Rul.QALY.Rul.CFR}
+%
+\begin{Description}\relax
+Sum to time of death or a prespecified time horizon.
+CFRs are dependent on age.
+Utility is fixed over time.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+calc_QALY_CFR(AGES = NA, cfr_age_lookup = NULL, time_horizon = NA,
+  utility = 0.9)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{AGES}] Vector of ages at start
+
+\item[\code{cfr\_age\_lookup}] Data frame of case-fatality ratios for ages
+
+\item[\code{time\_horizon}] Vector of end dates for each individual
+
+\item[\code{utility}] Proportion health detriment
+\end{ldescription}
+\end{Arguments}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{calc\_QALY}{calc.Rul.QALY}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+
+# 12 month case fatality rate
+# Crofts et al (2008)
+cfr_age_breaks <- c(15, 45, 65, 200)
+cfr_age_levels <- levels(cut(0, cfr_age_breaks, right = FALSE))
+
+cfr_age_lookup <- data.frame(age = cfr_age_levels,
+                             cfr = c(0.0018, 0.0476, 0.1755),
+                             a = c(1, 125, 413), #beta distn
+                             b = c(564, 2500, 1940))
+
+rownames(cfr_age_lookup) <- cfr_age_lookup$age
+
+# status-quo
+QALY.statusquo <- calc_QALY_CFR(AGES = IMPUTED_sample$cfr_age_groups[IMPUTED_sample$uk_tb==1],
+                                cfr_age_lookup)
+
+# screened imputed sample
+QALY.screened <- calc_QALY_CFR(AGES = IMPUTED_sample$cfr_age_groups[IMPUTED_sample$uk_tb1==1],
+                               cfr_age_lookup)
+
+# who changed LTBI status
+uk_TB.completedTx <- (IMPUTED_sample$uk_tb1==0 & IMPUTED_sample$uk_tb==1)
+
+# fixed over time
+QALY_uk_TB.completedTx <- years(death.isdtt[uk_TB.completedTx] - uk_tb.isdtt[uk_TB.completedTx])
+
+QALY.screened <- c(QALY.screened, QALY_uk_TB.completedTx)
+
+# (non-fixed) discounted all-cause (non-active TB)
+notification_to_allcause_death <- (IMPUTED_sample$date_death1_issdt - IMPUTED_sample$fup_issdt)/365
+
+calc_QALY_CFR(time_horizon = notification_to_allcause_death[uk_TB.completedTx],
+              utility = 1.0)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{calc\_QALY\_population}{Calculate QALYs For Population}{calc.Rul.QALY.Rul.population}
+%
+\begin{Description}\relax
+This is a wrapper function for \code{calc\_QALY} over
+multiple time horizons (e.g. individuals).
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+calc_QALY_population(utility, age, time_horizons, start_delay = 0, ...)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{utility}] Vector of utilities for each year in to the future, between 0 and 1
+
+\item[\code{age}] Vector of ages at start
+
+\item[\code{time\_horizons}] Vector of non-negative durations
+
+\item[\code{start\_delay}] What time delay to origin, to shift discounting
+
+\item[\code{...}] Additional arguments
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Assume that the utilities are the same for all individuals.
+\end{Details}
+%
+\begin{Value}
+QALY vector
+\end{Value}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{calc\_QALY\_CFR}{calc.Rul.QALY.Rul.CFR}},
+\code{\LinkA{calc\_QALY}{calc.Rul.QALY}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{CFR\_time\_horizon.adjusted\_life\_years}{Case-Fatality Rate Determined Time Horizon}{CFR.Rul.time.Rul.horizon.adjusted.Rul.life.Rul.years}
+%
+\begin{Description}\relax
+Using this function then don't require a separate CFR
+function to calculate the total QALYs.
+DRY priniciple.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+CFR_time_horizon.adjusted_life_years(adjusted_life_years, cfr_modelframe)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{adjusted\_life\_years}] An object of class adjusted\_life\_years
+
+\item[\code{cfr\_modelframe}] Data frame with CFR and ages
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+An object of class adjusted\_life\_years
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+AdjLifeYears <- adjusted_life_years(
+                    start_year = 2016,
+                    end_year = 2020,
+                    age = NA,
+                    time_horizon = NA,
+                    utility = 0.9,
+                    discount_rate = 0.035)
+
+cfr_modelframe <- model.frame(cfr ~ age, data = cfr_age_lookup)
+
+CFR_time_horizon.adjusted_life_years(AdjLifeYears, cfr_modelframe)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{discount}{Discounted Values Over Time}{discount}
+%
+\begin{Description}\relax
+Dscounted value, e.g. cost or health (QALY), for each time point, e.g. year.
+E.g. a QALY in the future is worth less to us now because of 'interest'
+or conversely we'd need more QALYs now to have a QALY further in the future.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+discount(discount_rate = 0.035, t_limit = 100)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{discount\_rate}] Discount factor, default at 3.5\%
+
+\item[\code{t\_limit}] Time period (positive integer) to discount over starting from 1
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Details}\relax
+Formula used is
+\deqn{ 1/(1 + discount_rate)^years}{}
+\end{Details}
+%
+\begin{Value}
+Discounted value for each time point up to \code{t\_limit}
+\end{Value}
+%
+\begin{References}\relax
+Severens, Johan L and Milne, Richard J,
+Value in Health, 4, Discounting Health Outcomes in Economic Evaluation : The Ongoing Debate,
+volume 7, 2004
+\end{References}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+D <- discount(t_limit = 10)
+utility <- 0.97
+
+# Discounted QALYs upto 10 years
+sum(utility * D)
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{fillin\_missing\_utilities}{Fill-in Missing Trailing Utilities}{fillin.Rul.missing.Rul.utilities}
+%
+\begin{Description}\relax
+Repeat last value up to final period.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+fillin_missing_utilities(utility, time_horizon)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{utility}] Vector of health quality of life values between 0 and 1
+
+\item[\code{time\_horizon}] Non-negative integer
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Vector of utilities
+\end{Value}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{calc\_QALY\_population}{calc.Rul.QALY.Rul.population}}
+\end{SeeAlso}
+\inputencoding{utf8}
+\HeaderA{inflation\_adjust\_cost}{Calculate Inflation Adjusted Costs}{inflation.Rul.adjust.Rul.cost}
+%
+\begin{Description}\relax
+Up to the present time inflated upwards.
+Option to use the ONS GDP\_Deflators\_Qtrly\_National\_Accounts or
+a fixed 3.5\%.
+Can't download directly into function because the .csv on the website is too messy as-is.
+This would be good to do though so that can always use latest version.
+TODO: webscraping? regular expressions?
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+inflation_adjust_cost(from_year, to_year, from_cost, reference = NA,
+  fixed = TRUE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{from\_year}] Date of cost to convert from
+
+\item[\code{to\_year}] Date to convert cost to
+
+\item[\code{from\_cost}] Cost at \code{from\_year}
+
+\item[\code{reference}] Source of data (string)
+
+\item[\code{fixed}] Fixed 3.5\% rate of inflation?
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Examples}
+\begin{ExampleCode}
+from_year <- 2012
+to_year <- 2015
+from_cost <- 96.140
+
+inflation_adjust_cost(from_year, to_year, from_cost, fixed = FALSE)
+#100
+
+inflation_adjust_cost(from_year = 2010, to_year = 2016, from_cost = 1)
+#1.229255
+1*(1+0.035)^6
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{make\_discount}{Make an Encapsulated Discount Function}{make.Rul.discount}
+%
+\begin{Description}\relax
+This format doesn't need to keep track of time.
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+make_discount(discount_rate = 0.035)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{discount\_rate}] Discount factor, default at 3.5\%
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+Function with global scoped index
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{plot\_QALY}{QALY Plot as a Non-Increasing Step Function Over Time}{plot.Rul.QALY}
+%
+\begin{Description}\relax
+QALY Plot as a Non-Increasing Step Function Over Time
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+plot_QALY(QALYs, overlay = FALSE, XLIM = c(0, 80), COL = "light grey",
+  age_annotate = FALSE)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{QALYs}] QALY class object
+
+\item[\code{overlay}] Overlay lines on current plot?
+
+\item[\code{age\_annotate}] 
+\end{ldescription}
+\end{Arguments}
+%
+\begin{SeeAlso}\relax
+\code{\LinkA{total\_QALYs.adjusted\_life\_years}{total.Rul.QALYs.adjusted.Rul.life.Rul.years}}
+\end{SeeAlso}
+%
+\begin{Examples}
+\begin{ExampleCode}
+QALYs <- total_QALYs(AdjLifeYears)
+plot_QALY(QALYs)
+
+## list of objects
+plot_QALY(QALY_diseasefree[[1]], overlay = F)
+map(QALY_diseasefree, plot_QALY, overlay = T, COL = rgb(0, 0, 0, 0.1))
+map(QALYloss_diseasefree, plot_QALY, overlay = T, COL = "red")
+
+# cumulative total QALY loss
+sapply(QALY_diseasefree,
+       FUN = function(x) attr(x, "yearly_QALYs")) %>%
+       rowSums(na.rm = TRUE) %>%
+       cumsum %>%
+       plot(type = 'l')
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{total\_QALYs}{Calculate Life-Time QALYs}{total.Rul.QALYs}
+%
+\begin{Description}\relax
+Calculate Life-Time QALYs
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+total_QALYs(adjusted_life_years)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{adjusted\_life\_years}] Object of class \code{adjusted\_life\_years}
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+QALYs object
+\end{Value}
+\inputencoding{utf8}
+\HeaderA{total\_QALYs.adjusted\_life\_years}{Calculate Life-Time QALYs}{total.Rul.QALYs.adjusted.Rul.life.Rul.years}
+%
+\begin{Description}\relax
+Calculate Life-Time QALYs
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+## S3 method for class 'adjusted_life_years'
+total_QALYs(adj_years)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{adjusted\_life\_years}] Object of class \code{adjusted\_life\_years}
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+QALYs object
+\end{Value}
+%
+\begin{Examples}
+\begin{ExampleCode}
+
+AdjLifeYears <- adjusted_life_years(
+                    start_year = 2016,
+                    end_year = 2020,
+                    age = NA,
+                    time_horizon = NA,
+                    utility = 0.9,
+                    discount_rate = 0.035)
+
+total_QALYs(AdjLifeYears)
+## 2.913622
+
+total_QALYs(1)
+## "Error: Not an adjusted_life_years class input object."
+
+\end{ExampleCode}
+\end{Examples}
+\inputencoding{utf8}
+\HeaderA{total\_QALYs.default}{Calculate Life-Time QALYs}{total.Rul.QALYs.default}
+%
+\begin{Description}\relax
+Calculate Life-Time QALYs
+\end{Description}
+%
+\begin{Usage}
+\begin{verbatim}
+## Default S3 method:
+total_QALYs(adjusted_life_years)
+\end{verbatim}
+\end{Usage}
+%
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{adjusted\_life\_years}] Object of class \code{adjusted\_life\_years}
+\end{ldescription}
+\end{Arguments}
+%
+\begin{Value}
+QALYs object
+\end{Value}
+\printindex{}
+\end{document}
