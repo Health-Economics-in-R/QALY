@@ -91,7 +91,7 @@ adjusted_life_years <- function(start_year = 0,
       left_join(x = data.frame("cut_intervals" = ages),
                 y = Kind1998_agegroups_QoL,
                 by = "cut_intervals") %>%
-      select(QoL) %>% unlist() %>% unname()
+      dplyr::select(QoL) %>% unlist() %>% unname()
   }
 
   adjusted_life_years <- list(start_year = start_year,

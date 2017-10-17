@@ -18,6 +18,7 @@
 #' @param age Year of age
 #' @param time_horizon Non-negative value how many time step into future as sum limit
 #' @param halfend Should the last year be a half year
+#' @param start_delay What time delay to origin, to shift discounting
 #'
 #' @return
 #' @export
@@ -34,7 +35,8 @@
 calc_QALY <- function(utility = NA,
                       age = NA,
                       time_horizon = NA,
-                      halfend = FALSE){
+                      halfend = FALSE,
+                      start_delay = 0){
 
   if (!is.na(time_horizon) && time_horizon == 0) return(0)
 
@@ -57,16 +59,21 @@ calc_QALY <- function(utility = NA,
       left_join(x = data.frame("cut_intervals" = ages),
                 y = Kind1998_agegroups_QoL,
                 by = "cut_intervals") %>%
-      select(QoL) %>% unlist() %>% unname()
+      dplyr::select(QoL) %>% unlist() %>% unname()
   }
 
-  utility <- QALY::fillin_missing_utilities(utility, time_horizon)
+  utility <- QALY::fillin_missing_utilities(utility, ceiling(time_horizon))
 
   discountfactor <- QALY::make_discount()
 
+  for (i in seq_len(start_delay)) {
+    discountfactor()
+  }
+
+  # a proportion of the final period (year)
   period <-
     if (halfend) {
-      c(rep(1, time_horizon - 1), 0.5)
+      c(rep(1, time_horizon - 1), timehorizon %% 1) #previously 0.5
     }else{
       c(rep(1, time_horizon))
     }
@@ -93,6 +100,7 @@ calc_QALY <- function(utility = NA,
 #' @param utility Vector of utilities for each year in to the future, between 0 and 1
 #' @param age Vector of ages at start
 #' @param time_horizons Vector of non-negative durations
+#' @param start_delay What time delay to origin, to shift discounting
 #' @param ... Additional arguments
 #'
 #' @return QALY vector
@@ -105,6 +113,7 @@ calc_QALY <- function(utility = NA,
 calc_QALY_population <- function(utility,
                                  age,
                                  time_horizons,
+                                 start_delay = 0,
                                  ...){
 
   stopifnot(all(time_horizons >= 0))
@@ -122,7 +131,8 @@ calc_QALY_population <- function(utility,
 
     QALY[i] <- calc_QALY(utility = utility,
                          age = age[i],
-                         time_horizon = time_horizons[i])
+                         time_horizon = time_horizons[i],
+                         start_delay = start_delay[i])
   }
 
   return(QALY)
