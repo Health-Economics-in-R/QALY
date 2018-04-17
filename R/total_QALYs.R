@@ -15,7 +15,7 @@ total_QALYs <- function(adjusted_life_years) UseMethod("total_QALYs")
 #' @return QALYs object
 #' @export
 total_QALYs.default <- function(adjusted_life_years){
-  print("Error: Not an adjusted_life_years class input object.")
+  stop("Error: Not an adjusted_life_years class input object.")
 }
 
 

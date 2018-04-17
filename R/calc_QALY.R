@@ -59,18 +59,21 @@ calc_QALY <- function(utility = NA,
       left_join(x = data.frame("cut_intervals" = ages),
                 y = Kind1998_agegroups_QoL,
                 by = "cut_intervals") %>%
-      dplyr::select(QoL) %>% unlist() %>% unname()
+      dplyr::select(QoL) %>%
+      unlist() %>%
+      unname()
   }
 
-  utility <- QALY::fillin_missing_utilities(utility, ceiling(time_horizon))
+  utility <- fillin_missing_utilities(utility, ceiling(time_horizon))
 
-  discountfactor <- QALY::make_discount()
+  discountfactor <- make_discount()
 
   for (i in seq_len(start_delay)) {
     discountfactor()
   }
 
   # a proportion of the final period (year)
+  ##TODO: do we really needs this since start and end may cancel-out?
   period <-
     if (halfend) {
       c(rep(1, time_horizon - 1), timehorizon %% 1) #previously 0.5
@@ -113,26 +116,38 @@ calc_QALY <- function(utility = NA,
 calc_QALY_population <- function(utility,
                                  age,
                                  time_horizons,
-                                 start_delay = 0,
+                                 start_delay = NA,
                                  ...){
 
-  stopifnot(all(time_horizons >= 0))
+  if (!all(time_horizons >= 0)) stop('Time horizons must be at least 0.')
 
-  stopifnot(all(utility >= 0),
-            all(utility <= 1))
+  if (!all(utility >= 0) && !all(utility <= 1)) stop('Utilities must be between 0 and 1.')
+
+  if (is.na(start_delay)) {
+    start_delay <- rep(0, length(time_horizons))
+  }
 
   if (is.list(time_horizons)) {
-    time_horizons <- unlist(time_horizons) %>% set_names(NULL)
+    time_horizons <-
+      unlist(time_horizons) %>%
+      set_names(NULL)
   }
 
   QALY <- NA
+  dat <- cbind(age,
+               time_horizons,
+               start_delay)
+
+  mem_calc_QALY <- memoise(calc_QALY)
 
   for (i in seq_along(time_horizons)) {
 
-    QALY[i] <- calc_QALY(utility = utility,
-                         age = age[i],
-                         time_horizon = time_horizons[i],
-                         start_delay = start_delay[i])
+    dati <- dat[i, ]
+
+    QALY[i] <- mem_calc_QALY(utility = utility,
+                             age = dati['age'],
+                             time_horizon = dati['time_horizons'],
+                             start_delay = dati['start_delay'])
   }
 
   return(QALY)
@@ -149,14 +164,15 @@ calc_QALY_population <- function(utility,
 #' @return Vector of utilities
 #' @export
 #' @seealso \code{\link{calc_QALY_population}}
+#' @aliases fillin_with_last_value
 #'
 fillin_missing_utilities <- function(utility,
                                      time_horizon){
 
-  n.utility <- length(utility)
-  last_utility <- utility[n.utility]
+  n_utility <- length(utility)
+  last_utility <- utility[n_utility]
+  n_rep <- max(0, time_horizon - n_utility, na.rm = TRUE)
 
-  c(utility, rep(last_utility,
-                 max(0, time_horizon - n.utility, na.rm = TRUE)))
+  c(utility, rep(last_utility, n_rep))
 }
 
