@@ -28,9 +28,10 @@
 #' total_QALYs(AdjLifeYears)
 #' ## 2.913622
 #'
-#' total_QALY(1)
-#' ## "Error: Not an adjusted_life_years class input object."
-#'
+#' \dontrun{
+#'  total_QALY(1)
+#'  ## "Error: Not an adjusted_life_years class input object."
+#' }
 adjusted_life_years <- function(start_year = 0,
                                 end_year = NA,
                                 age = NA,
@@ -42,7 +43,7 @@ adjusted_life_years <- function(start_year = 0,
   if (!is.na(end_year) & end_year < 0) stop("End year must be non-negative.")
   if (!is.na(time_horizon) & time_horizon < 0) stop("Time horizon must be non-negative.")
 
-  if (!is.na(age) & age < 0) stop("Age must be non-negative.")
+  if (!is.na(age) && age < 0) stop("Age must be non-negative.")
 
   # if(!is.na(start_year)) start_year <- floor(start_year)
   # if(!is.na(end_year)) end_year <- floor(end_year)
@@ -81,8 +82,8 @@ adjusted_life_years <- function(start_year = 0,
     QoL <- rep(1, time_horizon)
   }else{
 
-    ages <-  cut(x = age + 0:time_horizon,
-                 breaks = c(-1, Kind1998_agegroups_QoL$max_age))
+    ages <- cut(x = age + 0:time_horizon,
+                breaks = c(-1, Kind1998_agegroups_QoL$max_age))
 
     Kind1998_agegroups_QoL$cut_intervals <- cut(x = Kind1998_agegroups_QoL$max_age,
                                                 breaks = c(-1, Kind1998_agegroups_QoL$max_age))

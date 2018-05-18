@@ -2,12 +2,12 @@
   "name": "data",
   "resources": [
     {
-      "path": "data/deflators.csv",
-      "name": "deflators",
+      "path": "data/GDP_deflators.csv",
+      "name": "GDP_deflators",
       "schema": {
         "fields": [
           {
-            "name": "Calendar year",
+            "name": "year",
             "type": "integer"
           },
           {
@@ -16,6 +16,10 @@
           },
           {
             "name": "per cent change on previous year",
+            "type": "number"
+          },
+          {
+            "name": "prop change on previous year",
             "type": "number"
           }
         ]
