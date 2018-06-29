@@ -5,6 +5,9 @@
 #'
 #' @param start_year Calendar year to begin calculation
 #' @param end_year Calendar year to end calculation
+#' @param delay If the start_year is in the future then the
+#'              first discounting is not 1 but smaller accordingly (positive integer)
+#'              We could alternatively define year_now
 #' @param age Age at start of period
 #' @param time_horizon Number of time periods from start to end date
 #' @param utility Proportion health detriment
@@ -34,6 +37,7 @@
 #' }
 adjusted_life_years <- function(start_year = 0,
                                 end_year = NA,
+                                delay = 0,
                                 age = NA,
                                 time_horizon = NA,
                                 utility,
@@ -54,6 +58,10 @@ adjusted_life_years <- function(start_year = 0,
 
   if (any(discount_rate > 1) | any(discount_rate < 0)) {
     stop("Discount factors must be between 0 and 1.")
+  }
+
+  if (delay < 0) {
+    stop("delay must be non-negative.")
   }
 
   if (is.na(time_horizon) & is.na(end_year)) {
@@ -97,6 +105,7 @@ adjusted_life_years <- function(start_year = 0,
 
   adjusted_life_years <- list(start_year = start_year,
                               end_year = end_year,
+                              delay = delay,
                               age = age,
                               time_horizon = time_horizon,
                               utility = utility,

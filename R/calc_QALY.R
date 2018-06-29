@@ -19,6 +19,7 @@
 #' @param time_horizon Non-negative value how many time step into future as sum limit
 #' @param halfend Should the last year be a half year
 #' @param start_delay What time delay to origin, to shift discounting
+#' @param discount_rate default 3.5\%
 #'
 #' @return
 #' @export
@@ -36,7 +37,8 @@ calc_QALY <- function(utility = NA,
                       age = NA,
                       time_horizon = NA,
                       halfend = FALSE,
-                      start_delay = 0){
+                      start_delay = 0,
+                      discount_rate = 0.035){
 
   if (!is.na(time_horizon) && time_horizon == 0) return(0)
 
@@ -66,7 +68,7 @@ calc_QALY <- function(utility = NA,
 
   utility <- fillin_missing_utilities(utility, ceiling(time_horizon))
 
-  discountfactor <- make_discount()
+  discountfactor <- make_discount(discount_rate = discount_rate)
 
   for (i in seq_len(start_delay)) {
     discountfactor()
@@ -81,10 +83,9 @@ calc_QALY <- function(utility = NA,
       c(rep(1, time_horizon))
     }
 
-  # don't discount first year
-  QALY <- period[1] * utility[1] * QoL[1]
+  QALY <- 0
 
-  for (i in seq_along(utility[-1])) {
+  for (i in seq_along(utility)) {
 
     QALY <- QALY + (period[i] * utility[i] * QoL[i] * discountfactor())
   }
@@ -104,6 +105,7 @@ calc_QALY <- function(utility = NA,
 #' @param age Vector of ages at start
 #' @param time_horizons Vector of non-negative durations
 #' @param start_delay What time delay to origin, to shift discounting
+#' @param discount_rate default 3.5\%
 #' @param ... Additional arguments
 #'
 #' @return QALY vector
@@ -117,13 +119,18 @@ calc_QALY_population <- function(utility,
                                  age,
                                  time_horizons,
                                  start_delay = NA,
+                                 discount_rate = 0.035,
                                  ...){
 
   if (!all(time_horizons >= 0)) stop('Time horizons must be at least 0.')
 
   if (!all(utility >= 0) && !all(utility <= 1)) stop('Utilities must be between 0 and 1.')
 
-  if (is.na(start_delay)) {
+  if (!all(is.na(start_delay)) && any(is.na(start_delay))) {
+    stop('Some but not all start_delays are NA')
+  }
+
+  if (all(is.na(start_delay))) {
     start_delay <- rep(0, length(time_horizons))
   }
 
@@ -147,32 +154,10 @@ calc_QALY_population <- function(utility,
     QALY[i] <- mem_calc_QALY(utility = utility,
                              age = dati['age'],
                              time_horizon = dati['time_horizons'],
-                             start_delay = dati['start_delay'])
+                             start_delay = dati['start_delay'],
+                             discount_rate = discount_rate)
   }
 
   return(QALY)
-}
-
-
-#' @title Fill-in Missing Trailing Utilities
-#'
-#' @description Repeat last value up to final period.
-#'
-#' @param utility Vector of health quality of life values between 0 and 1
-#' @param time_horizon Non-negative integer
-#'
-#' @return Vector of utilities
-#' @export
-#' @seealso \code{\link{calc_QALY_population}}
-#' @aliases fillin_with_last_value
-#'
-fillin_missing_utilities <- function(utility,
-                                     time_horizon){
-
-  n_utility <- length(utility)
-  last_utility <- utility[n_utility]
-  n_rep <- max(0, time_horizon - n_utility, na.rm = TRUE)
-
-  c(utility, rep(last_utility, n_rep))
 }
 
