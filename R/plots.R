@@ -64,14 +64,14 @@ plot_QALY <- function(QALYs,
        ylab = "Health-related quality of life",
        xlab = "Time",
        xlim = XLIM,
-       col = COL,
-       )
+       col = COL
+  )
 
   # lines(attr(QALYs,"adjusted_life_years")$QoL, lty = 2)
   # lines(attr(QALYs,"adjusted_life_years")$utility, lty = 3)
 
   # annotate start and end ages
-  if(age_annotate){
+  if (age_annotate) {
 
     text(1, yearly_QALYs[1], attr(QALYs,"adjusted_life_years")$age)
     text(x = length(yearly_QALYs),
@@ -80,6 +80,52 @@ plot_QALY <- function(QALYs,
   }
 }
 
+
+##TODO: finish S3 method
+
+#' @rdname plot
+#' @export
+#'
+plot <- function(QALYs) UseMethod("plot")
+
+
+#' @rdname plot
+#' @export
+#'
+plot.QALYs <- function(QALYs,
+                       overlay = FALSE,
+                       XLIM = c(0, 80),
+                       COL = "light grey",
+                       age_annotate = FALSE){
+
+  # append final year
+  yearly_QALYs <- c(attr(QALYs,"yearly_QALYs"),
+                    min(attr(QALYs,"yearly_QALYs")))
+
+  par(new = overlay)
+
+  plot(x = seq_along(yearly_QALYs) + rnorm(length(yearly_QALYs), 0, 0.2),
+       y = yearly_QALYs + rnorm(1, 0, 0.01),
+       type = "s",
+       ylim = c(0, 1),
+       ylab = "Health-related quality of life",
+       xlab = "Time",
+       xlim = XLIM,
+       col = COL
+  )
+
+  # lines(attr(QALYs,"adjusted_life_years")$QoL, lty = 2)
+  # lines(attr(QALYs,"adjusted_life_years")$utility, lty = 3)
+
+  # annotate start and end ages
+  if (age_annotate) {
+
+    text(1, yearly_QALYs[1], attr(QALYs,"adjusted_life_years")$age)
+    text(x = length(yearly_QALYs),
+         y = yearly_QALYs[length(yearly_QALYs)],
+         labels = as.character(attr(QALYs,"adjusted_life_years")$age + length(yearly_QALYs) - 1))
+  }
+}
 
 
 

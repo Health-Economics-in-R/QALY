@@ -12,7 +12,9 @@ Imports:
     readr,
     datapkg,
     memoise,
-    dplyr
+Depends:
+    dplyr,
+    purrr
 Suggests:
     testthat
 RoxygenNote: 6.0.1

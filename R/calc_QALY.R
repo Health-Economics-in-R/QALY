@@ -20,6 +20,7 @@
 #' @param halfend Should the last year be a half year
 #' @param start_delay What time delay to origin, to shift discounting
 #' @param discount_rate default 3.5\%
+#' @param utility_method Should the yearly QALYs be summed to a scalar? \code{add} or \code{prod}
 #'
 #' @return
 #' @export
@@ -31,14 +32,17 @@
 #' comparing QALY and DALY calculations, volume 21, 2006
 #'
 #' @examples
-#' calc_QALY(utility = 0.9, age = 13, time_horizon = 49)
+#' calc_QALY(utility = 0.9,
+#'           age = 13,
+#'           time_horizon = 49)
 #'
 calc_QALY <- function(utility = NA,
                       age = NA,
                       time_horizon = NA,
                       halfend = FALSE,
                       start_delay = 0,
-                      discount_rate = 0.035){
+                      discount_rate = 0.035,
+                      utility_method = "add"){
 
   if (!is.na(time_horizon) && time_horizon == 0) return(0)
 
@@ -47,23 +51,13 @@ calc_QALY <- function(utility = NA,
     time_horizon <- length(utility)
   }
 
+  HSUV_method <- HSUV(method = utility_method)
+
   if (is.na(age)) {
     QoL <- rep(1, time_horizon)
   }else{
 
-    ages <-  cut(x = age + 0:time_horizon,
-                 breaks = c(-1, Kind1998_agegroups_QoL$max_age))
-
-    Kind1998_agegroups_QoL$cut_intervals <- cut(x = Kind1998_agegroups_QoL$max_age,
-                                                breaks = c(-1, Kind1998_agegroups_QoL$max_age))
-
-    QoL <-
-      left_join(x = data.frame("cut_intervals" = ages),
-                y = Kind1998_agegroups_QoL,
-                by = "cut_intervals") %>%
-      dplyr::select(QoL) %>%
-      unlist() %>%
-      unname()
+    QoL <- QoL_by_age(age, time_horizon)
   }
 
   utility <- fillin_missing_utilities(utility, ceiling(time_horizon))
@@ -78,23 +72,24 @@ calc_QALY <- function(utility = NA,
   ##TODO: do we really needs this since start and end may cancel-out?
   period <-
     if (halfend) {
-      c(rep(1, time_horizon - 1), timehorizon %% 1) #previously 0.5
+      c(rep(1, time_horizon - 1), time_horizon %% 1) #previously 0.5
     }else{
       c(rep(1, time_horizon))
     }
 
-  QALY <- 0
+  QALY <- vector(mode = 'numeric',
+                 length = time_horizon)
 
-  for (i in seq_along(utility)) {
+  for (i in seq_len(time_horizon)) {
 
-    QALY <- QALY + (period[i] * utility[i] * QoL[i] * discountfactor())
+    QALY[i] <- period[i] * HSUV_method(utility[i], QoL[i]) * discountfactor()
   }
 
   return(QALY)
 }
 
 
-#' @title Calculate QALYs For Population
+#' @title Calculate QALYs for population
 #'
 #' @description This is a wrapper function for \code{calc_QALY} over
 #' multiple time horizons (e.g. individuals).
@@ -106,6 +101,7 @@ calc_QALY <- function(utility = NA,
 #' @param time_horizons Vector of non-negative durations
 #' @param start_delay What time delay to origin, to shift discounting
 #' @param discount_rate default 3.5\%
+#' @param sum_res Should the yearly QALYs be summed to a scalar?
 #' @param ... Additional arguments
 #'
 #' @return QALY vector
@@ -120,6 +116,7 @@ calc_QALY_population <- function(utility,
                                  time_horizons,
                                  start_delay = NA,
                                  discount_rate = 0.035,
+                                 sum_res = TRUE,
                                  ...){
 
   if (!all(time_horizons >= 0)) stop('Time horizons must be at least 0.')
@@ -140,23 +137,35 @@ calc_QALY_population <- function(utility,
       set_names(NULL)
   }
 
-  QALY <- NA
+  QALY <- vector(mode = 'list',
+                 length = length(time_horizons))
+
   dat <- cbind(age,
                time_horizons,
                start_delay)
 
-  mem_calc_QALY <- memoise(calc_QALY)
+  if (sum_res) {
+    fn <- sum
+  }else{
+    fn <- identity
+  }
+
+  mem_calc_QALY <-
+    memoise(function(...)
+      fn(calc_QALY(...)))
 
   for (i in seq_along(time_horizons)) {
 
     dati <- dat[i, ]
 
-    QALY[i] <- mem_calc_QALY(utility = utility,
-                             age = dati['age'],
-                             time_horizon = dati['time_horizons'],
-                             start_delay = dati['start_delay'],
-                             discount_rate = discount_rate)
+    QALY[[i]] <- mem_calc_QALY(utility = utility,
+                               age = dati['age'],
+                               time_horizon = dati['time_horizons'],
+                               start_delay = dati['start_delay'],
+                               discount_rate = discount_rate, ...)
   }
+
+  if (sum_res) QALY <- unlist(QALY)
 
   return(QALY)
 }

@@ -12,6 +12,7 @@
 #' @param time_horizon Number of time periods from start to end date
 #' @param utility Proportion health detriment
 #' @param discount_rate Fixed proportion reduction over time
+#' @param utility_method Should the yearly QALYs be summed to a scalar? \code{add} or \code{prod}
 #'
 #' @return Object of class adjusted_life_years
 #' @export
@@ -41,7 +42,8 @@ adjusted_life_years <- function(start_year = 0,
                                 age = NA,
                                 time_horizon = NA,
                                 utility,
-                                discount_rate = 0.035){
+                                discount_rate = 0.035,
+                                utility_method = "add"){
 
   if (start_year < 0) stop("Start year must be non-negative.")
   if (!is.na(end_year) & end_year < 0) stop("End year must be non-negative.")
@@ -86,21 +88,12 @@ adjusted_life_years <- function(start_year = 0,
 
   utility <- fillin_missing_utilities(utility, time_horizon)
 
-  if (is.na(age)) { #age-dependent Quality of Life
+  if (is.na(age)) {
+
     QoL <- rep(1, time_horizon)
   }else{
 
-    ages <- cut(x = age + 0:time_horizon,
-                breaks = c(-1, Kind1998_agegroups_QoL$max_age))
-
-    Kind1998_agegroups_QoL$cut_intervals <- cut(x = Kind1998_agegroups_QoL$max_age,
-                                                breaks = c(-1, Kind1998_agegroups_QoL$max_age))
-
-    QoL <-
-      left_join(x = data.frame("cut_intervals" = ages),
-                y = Kind1998_agegroups_QoL,
-                by = "cut_intervals") %>%
-      dplyr::select(QoL) %>% unlist() %>% unname()
+    QoL <- QoL_by_age(age, time_horizon)
   }
 
   adjusted_life_years <- list(start_year = start_year,
@@ -111,7 +104,8 @@ adjusted_life_years <- function(start_year = 0,
                               utility = utility,
                               QoL = QoL,
                               discount_rate = discount_rate,
-                              death = NA)
+                              death = NA,
+                              utility_method = utility_method)
 
   class(adjusted_life_years) <- c("adjusted_life_years", class(adjusted_life_years))
 
