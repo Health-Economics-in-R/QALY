@@ -92,7 +92,10 @@ test_that("Population QALY calculation", {
 })
 
 
+test_that("compare with explicit calcs", {
 
-# 1/(1 + 0.035)
-
+  expect_equivalent(calc_QALY(utility = 1,
+                              time_horizon = 3),
+                    c(1, 1/(1 + 0.035), 1/(1 + 0.035)^2))
+})
 

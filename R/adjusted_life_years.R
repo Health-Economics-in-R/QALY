@@ -86,7 +86,8 @@ adjusted_life_years <- function(start_year = 0,
     time_horizon <- length(utility)
   }
 
-  utility <- fillin_missing_utilities(utility, time_horizon)
+  ##TODO: use intervals argument as well, see calc_QALY()
+  utility <- fillin_utilities(utility, time_horizon)
 
   if (is.na(age)) {
 

@@ -15,6 +15,7 @@
 #' However, since we may not know this then may not be necessary.
 #'
 #' @param utility Vector of values between 0 and 1 (1 - utility loss)
+#' @param intervals Time intervals for each utility
 #' @param age Year of age
 #' @param time_horizon Non-negative value how many time step into future as sum limit
 #' @param halfend Should the last year be a half year
@@ -37,6 +38,7 @@
 #'           time_horizon = 49)
 #'
 calc_QALY <- function(utility = NA,
+                      intervals = NA,
                       age = NA,
                       time_horizon = NA,
                       halfend = FALSE,
@@ -44,12 +46,11 @@ calc_QALY <- function(utility = NA,
                       discount_rate = 0.035,
                       utility_method = "add"){
 
+  if (is.na(time_horizon) & any(is.na(intervals))) stop("Error: missing a time argument.")
+
   if (!is.na(time_horizon) && time_horizon == 0) return(0)
 
-  if (is.na(time_horizon) | length(utility) > time_horizon) {
-
-    time_horizon <- length(utility)
-  }
+  if (is.na(time_horizon)) time_horizon <- sum(intervals)
 
   HSUV_method <- HSUV(method = utility_method)
 
@@ -60,7 +61,9 @@ calc_QALY <- function(utility = NA,
     QoL <- QoL_by_age(age, time_horizon)
   }
 
-  utility <- fillin_missing_utilities(utility, ceiling(time_horizon))
+  utility <- fillin_utilities(utility,
+                              intervals,
+                              ceiling(time_horizon))
 
   discountfactor <- make_discount(discount_rate = discount_rate)
 
@@ -97,6 +100,7 @@ calc_QALY <- function(utility = NA,
 #' @details Assume that the utilities are the same for all individuals.
 #'
 #' @param utility Vector of utilities for each year in to the future, between 0 and 1
+#' @param intervals Time intervals for each utility
 #' @param age Vector of ages at start
 #' @param time_horizons Vector of non-negative durations
 #' @param start_delay What time delay to origin, to shift discounting
@@ -112,16 +116,21 @@ calc_QALY <- function(utility = NA,
 #' @examples
 #'
 calc_QALY_population <- function(utility,
-                                 age,
-                                 time_horizons,
+                                 intervals = NA,
+                                 age = NA,
+                                 time_horizons = NA,
                                  start_delay = NA,
                                  discount_rate = 0.035,
                                  sum_res = TRUE,
                                  ...){
 
-  if (!all(time_horizons >= 0)) stop('Time horizons must be at least 0.')
+  if (all(!is.na(time_horizons)) && !all(time_horizons >= 0)) {
+    stop('Time horizons must be at least 0.')
+  }
 
-  if (!all(utility >= 0) && !all(utility <= 1)) stop('Utilities must be between 0 and 1.')
+  if (!all(utility >= 0) && !all(utility <= 1)) {
+    stop('Utilities must be between 0 and 1.')
+  }
 
   if (!all(is.na(start_delay)) && any(is.na(start_delay))) {
     stop('Some but not all start_delays are NA')
@@ -137,32 +146,32 @@ calc_QALY_population <- function(utility,
       set_names(NULL)
   }
 
+  n_pop <- max(length(intervals),
+               length(time_horizons),
+               na.rm = TRUE)
+
   QALY <- vector(mode = 'list',
-                 length = length(time_horizons))
+                 length = n_pop)
 
   dat <- cbind(age,
                time_horizons,
+               intervals,
                start_delay)
 
   if (sum_res) {
-    fn <- sum
+    op <- sum
   }else{
-    fn <- identity
+    op <- identity
   }
 
   mem_calc_QALY <-
     memoise(function(...)
-      fn(calc_QALY(...)))
+      op(calc_QALY(...)))
 
-  for (i in seq_along(time_horizons)) {
+  for (i in seq_along(n_pop)) {
 
-    dati <- dat[i, ]
-
-    QALY[[i]] <- mem_calc_QALY(utility = utility,
-                               age = dati['age'],
-                               time_horizon = dati['time_horizons'],
-                               start_delay = dati['start_delay'],
-                               discount_rate = discount_rate, ...)
+    QALY[[i]] <- do.call(what = mem_calc_QALY,
+                         args = list(dat[i, ]))
   }
 
   if (sum_res) QALY <- unlist(QALY)
