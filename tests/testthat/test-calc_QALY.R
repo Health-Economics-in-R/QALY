@@ -8,11 +8,22 @@ library(memoise)
 
 test_that("Special case utilities", {
 
-  expect_equal(calc_QALY(utility = 0), 0)
+  expect_equal(calc_QALY(utility = 0, time_horizon = 1), 0)
 
   expect_equal(calc_QALY(utility = 0,
                          time_horizon = 10),
                rep(0, 10))
+
+
+  expect_equal(calc_QALY(utility = 0, intervals = 1), 0)
+  expect_equal(calc_QALY(utility = 1, intervals = 1), 1)
+
+  expect_length(calc_QALY(utility = 1, intervals = 2), 2)
+  expect_equal(calc_QALY(utility = 1,
+                         intervals = 2,
+                         discount_rate = 0), c(1,1))
+
+
 })
 
 test_that("Discounting", {
@@ -37,8 +48,8 @@ test_that("Population QALY calculation", {
                                     age = 20,
                                     time_horizons = 2),
                sum(calc_QALY(utility = 0.9,
-                         age = 20,
-                         time_horizon = 2)))
+                             age = 20,
+                             time_horizon = 2)))
 
   # return list of yearly QALYs
   expect_equal(calc_QALY_population(utility = 0.9,
@@ -49,7 +60,7 @@ test_that("Population QALY calculation", {
                               age = 20,
                               time_horizon = 1)))
 
-  expect_equal(calc_QALY_population(utility = 0.9,
+  expect_equal(calc_QALY_population(utility = c(0.9, 0.9),
                                     age = c(20, 20),
                                     time_horizons = c(1,2),
                                     sum_res = FALSE),
@@ -61,19 +72,19 @@ test_that("Population QALY calculation", {
                               time_horizon = 2)))
 
   # invariant
-  expect_equal(diff(calc_QALY_population(utility = 0.9,
+  expect_equal(diff(calc_QALY_population(utility = c(0.9, 0.9),
                                          age = c(20, 20),
                                          time_horizons = c(1, 1))),
                0)
 
-  expect_equal(calc_QALY_population(utility = 1,
+  expect_equal(calc_QALY_population(utility = c(1,1),
                                     age = c(20, 20),
                                     time_horizons = c(1, 1)),
                c(0.87, 0.87))
 
   expect_lt(calc_QALY_population(utility = 1,
-                       age = 20,
-                       time_horizons = 10),
+                                 age = 20,
+                                 time_horizons = 10),
             calc_QALY_population(utility = 1,
                                  age = 20,
                                  time_horizons = 11))
@@ -85,10 +96,34 @@ test_that("Population QALY calculation", {
                                  age = 20,
                                  time_horizons = 10))
   # decreasing differences
-  expect_lt(diff(diff(calc_QALY_population(utility = 1,
+  expect_lt(diff(diff(calc_QALY_population(utility = c(1,1,1),
                                            age = 20,
                                            time_horizons = c(1, 2, 3)))),
             0)
+
+
+  # expect_equivalent(calc_QALY_population(utility = list(c(0.9, 0.9),
+  #                                                       c(0.8, 0.8)),
+  #                                        age = c(20, 20),
+  #                                        time_horizons = c(2, 2)),
+  #                   c(1.513961, 1.317343))
+  #
+  # expect_equivalent(calc_QALY_population(utility = list(c(0.9, 0.9),
+  #                                                       c(0.8, 0.8)),
+  #                                        age = c(20, 20),
+  #                                        time_horizons = c(3, 3)),
+  #                   c( 2.232765, 1.942795))
+
+  expect_equivalent(calc_QALY_population(utility = list(c(0.9, 0.9),
+                                                        c(0.8, 0.8)),
+                                         age = c(20, 20),
+                                         time_horizons = c(1, 1)),
+                    calc_QALY_population(utility = list(0.9,
+                                                        0.8),
+                                         age = c(20, 20),
+                                         time_horizons = c(1, 1)))
+
+
 })
 
 
@@ -97,5 +132,83 @@ test_that("compare with explicit calcs", {
   expect_equivalent(calc_QALY(utility = 1,
                               time_horizon = 3),
                     c(1, 1/(1 + 0.035), 1/(1 + 0.035)^2))
+})
+
+
+test_that("sum_res", {
+
+  # single value
+  expect_equivalent(calc_QALY_population(utility = 0.9,
+                                         age = 20,
+                                         time_horizons = 1,
+                                         sum_res = TRUE),
+                    calc_QALY_population(utility = 0.9,
+                                         age = 20,
+                                         time_horizons = 1,
+                                         sum_res = FALSE) %>% unlist)
+
+  expect_equivalent(calc_QALY_population(utility = c(0.9,0.9),
+                                         age = 20,
+                                         time_horizons = c(1,2),
+                                         sum_res = TRUE),
+                    lapply(calc_QALY_population(utility = c(0.9,0.9),
+                                                age = 20,
+                                                time_horizons = c(1,2),
+                                                sum_res = FALSE), sum) %>% unlist)
+})
+
+
+test_that("intervals", {
+
+
+
+
+  # constant intervals and single time_horizon
+  expect_equivalent(
+    calc_QALY_population(utility = list(c(0.9, 0.9),
+                                        c(0.8, 0.8)),
+                         age = c(20, 20),
+                         intervals = list(c(1,1),
+                                          c(1,1))),
+    calc_QALY_population(utility = list(c(0.9, 0.9),
+                                        c(0.8, 0.8)),
+                         age = c(20, 20),
+                         time_horizons = c(2, 2)))
+
+  # no discounting independent of start_delay
+  expect_equal(
+    calc_QALY(intervals = c(1,2),
+              utility = c(1,0.1),
+              age = NA,
+              start_delay = 0,
+              discount_rate = 0),
+    calc_QALY(intervals = c(1,2),
+              utility = c(1,0.1),
+              age = NA,
+              start_delay = 1,
+              discount_rate = 0))
+
+
+  expect_equal(
+    list(calc_QALY(intervals = c(1,1),
+                   utility = c(1,1),
+                   age = NA,
+                   start_delay = 1,
+                   discount_rate = 0),
+         calc_QALY(intervals = c(1,1),
+                   utility = c(1,1),
+                   age = NA,
+                   start_delay = 1,
+                   discount_rate = 0)),
+    calc_QALY_population(
+      intervals = list(c(1,1),
+                       c(1,1)),
+      utility = list(c(1,1),
+                     c(1,1)),
+      age = NA,
+      start_delay = NA,
+      discount_rate = 0,
+      sum_res = FALSE
+    ))
 })
 

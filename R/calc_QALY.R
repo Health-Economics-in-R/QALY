@@ -77,7 +77,7 @@ calc_QALY <- function(utility = NA,
     if (halfend) {
       c(rep(1, time_horizon - 1), time_horizon %% 1) #previously 0.5
     }else{
-      c(rep(1, time_horizon))
+      rep(1, time_horizon)
     }
 
   QALY <- vector(mode = 'numeric',
@@ -128,16 +128,12 @@ calc_QALY_population <- function(utility,
     stop('Time horizons must be at least 0.')
   }
 
-  if (!all(utility >= 0) && !all(utility <= 1)) {
-    stop('Utilities must be between 0 and 1.')
-  }
+  # if (!all(utility >= 0) && !all(utility <= 1)) {
+  #   stop('Utilities must be between 0 and 1.')
+  # }
 
   if (!all(is.na(start_delay)) && any(is.na(start_delay))) {
     stop('Some but not all start_delays are NA')
-  }
-
-  if (all(is.na(start_delay))) {
-    start_delay <- rep(0, length(time_horizons))
   }
 
   if (is.list(time_horizons)) {
@@ -150,13 +146,21 @@ calc_QALY_population <- function(utility,
                length(time_horizons),
                na.rm = TRUE)
 
+  if (all(is.na(start_delay))) {
+    start_delay <- rep(0, n_pop)
+  }
+
+  discount_rate <- rep(discount_rate, n_pop)
+
   QALY <- vector(mode = 'list',
                  length = n_pop)
 
-  dat <- cbind(age,
-               time_horizons,
-               intervals,
-               start_delay)
+  dat <- list(age = age,
+              utility = utility,
+              time_horizon = time_horizons,
+              intervals = intervals,
+              start_delay = start_delay,
+              discount_rate = discount_rate)
 
   if (sum_res) {
     op <- sum
@@ -168,11 +172,13 @@ calc_QALY_population <- function(utility,
     memoise(function(...)
       op(calc_QALY(...)))
 
-  for (i in seq_along(n_pop)) {
+  for (i in seq_len(n_pop)) {
+
+    argsi <- map(dat, i, .null = NA_integer_)
 
     QALY[[i]] <- do.call(what = mem_calc_QALY,
-                         args = list(dat[i, ]))
-  }
+                         args = argsi)
+    }
 
   if (sum_res) QALY <- unlist(QALY)
 
