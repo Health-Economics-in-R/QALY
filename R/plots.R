@@ -122,6 +122,3 @@ plot.QALYs <- function(QALYs,
 }
 
 
-
-
-

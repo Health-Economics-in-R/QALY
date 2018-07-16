@@ -13,7 +13,7 @@
 QoL_by_age <- function(age,
                        time_horizon) {
 
-  if (is.na(age)) return(rep(1, time_horizon))
+  if (is.na(age)) return(rep(1, ceiling(time_horizon)))
 
   lookup <- Kind1998_agegroups_QoL
 

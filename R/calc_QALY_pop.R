@@ -17,7 +17,6 @@
 #' @param utility Vector of values between 0 and 1 (1 - utility loss)
 #' @param intervals Time intervals for each utility
 #' @param age Year of age
-#' @param time_horizon Non-negative value how many time step into future as sum limit
 #' @param start_delay What time delay to origin, to shift discounting
 #' @param discount_rate default 3.5\%
 #' @param utility_method Should the yearly QALYs be summed to a scalar? \code{add} or \code{prod}
@@ -34,74 +33,73 @@
 #' @examples
 #' calc_QALY(utility = 0.9,
 #'           age = 13,
-#'           time_horizon = 49)
+#'           intervals = 49)
 #'
 calc_QALY <- function(utility = NA,
                       intervals = NA,
                       age = NA,
-                      time_horizon = NA,
                       start_delay = 0,
                       discount_rate = 0.035,
                       utility_method = "add"){
 
-  if (is.na(time_horizon) & any(is.na(intervals))) stop("Error: missing a time argument.")
-
-  if (!is.na(time_horizon) && time_horizon == 0) return(0)
+  if (any(is.na(intervals))) stop("Error: missing a time argument.")
 
   if (is.matrix(intervals)) intervals <- c(intervals)
 
-  remainder <- NULL
-
-  if (is.na(time_horizon)) {
-
-    time_horizon <- sum(intervals)
-    if (tail(unlist(intervals), 1) %% 1 != 0) remainder <- tail(unlist(intervals), 1) %% 1
-    time_horizon_whole <- sum(intervals) - ifelse(is.null(remainder), 0, remainder)
-
-  } else {
-
-    if (time_horizon %% 1 != 0) remainder <- time_horizon %% 1
-    time_horizon_whole <- floor(time_horizon)
-  }
-
   HSUV_method <- HSUV(method = utility_method)
 
-  discountfactor <- make_discount(discount_rate = discount_rate)
+  discountfactor <- make_discount(discount_rate)
 
   for (i in seq_len(start_delay)) {
     discountfactor()
   }
 
-  hw <- do.call(health_weights, MATCH_CALL)
+  QALY <- vector(mode = 'list',
+                 length = length(intervals))
 
-  QALY <- vector(mode = 'numeric',
-                 length = length(period))
+  time_elapsed  <- 0
+  cumul_current <- 0
 
-  for (i in seq_along(QALY)) {
+  for (i in seq_along(intervals)) {
 
-    QALY[i] <- hw$period[i] * HSUV_method(hw$utility[i], hw$QoL[i]) * discountfactor()
+    period <- c(rep(1, intervals[i]), get_remainder(intervals[i]))
+
+    QoL <- QoL_by_age(age + time_elapsed, ceiling(intervals[i]))
+
+    for (t in seq_along(period)) {
+
+      if (is_new_year(cumul_current, t)) discount_t <- discountfactor()
+      cumul_current <- cumul_current + t
+
+      QALY[[i]][t] <- period[t] * HSUV_method(utility[i], QoL[t]) * discount_t
+    }
+
+    time_elapsed <- time_elapsed + intervals[i]
   }
 
   return(QALY)
 }
 
 
-health_weights <- function(age,
-                           time_horizon,
-                           utility,
-                           intervals) {
+is_new_year <- function(cumul_current, t) {
 
-  time_horizon_years <- ceiling(time_horizon)
+  cumul_new <- cumul_current + t
+  floor(cumul_new) > floor(cumul_current)
+}
 
-  res$QoL <- QoL_by_age(age, time_horizon_years)
 
-  res$utility <- fillin_utilities(utility,
-                                  intervals,
-                                  time_horizon)
+get_remainder <- function(intervals) {
 
-  res$period <- c(rep(1, time_horizon_whole), remainder)
+  last_value <- tail(unlist(intervals), 1)
 
-  return(res)
+  if (last_value %% 1 != 0) {
+
+    remainder <- last_value %% 1
+  } else {
+
+    remainder <- NULL
+  }
+  return(remainder)
 }
 
 
@@ -115,7 +113,6 @@ health_weights <- function(age,
 #' @param utility Vector of utilities for each year in to the future, between 0 and 1
 #' @param intervals Time intervals for each utility
 #' @param age Vector of ages at start
-#' @param time_horizons Vector of non-negative durations
 #' @param start_delay What time delay to origin, to shift discounting
 #' @param discount_rate default 3.5\%
 #' @param sum_res Should the yearly QALYs be summed to a scalar?
@@ -131,33 +128,20 @@ health_weights <- function(age,
 calc_QALY_population <- function(utility,
                                  intervals = NA,
                                  age = NA,
-                                 time_horizons = NA,
                                  start_delay = NA,
                                  discount_rate = 0.035,
                                  sum_res = TRUE,
                                  ...){
 
-  if (all(!is.na(time_horizons)) && !all(time_horizons >= 0)) {
-    stop('Time horizons must be at least 0.')
-  }
-
-  # if (!all(utility >= 0) && !all(utility <= 1)) {
-  #   stop('Utilities must be between 0 and 1.')
+  # if (all(!is.na(intervals)) && !all(intervals >= 0)) {
+  #   stop('intervals must be at least 0.')
   # }
 
   if (!all(is.na(start_delay)) && any(is.na(start_delay))) {
     stop('Some but not all start_delays are NA')
   }
 
-  if (is.list(time_horizons)) {
-    time_horizons <-
-      unlist(time_horizons) %>%
-      set_names(NULL)
-  }
-
-  n_pop <- max(length(intervals),
-               length(time_horizons),
-               na.rm = TRUE)
+  n_pop <- length(intervals)
 
   if (all(is.na(start_delay))) {
     start_delay <- rep(0, n_pop)
@@ -170,7 +154,6 @@ calc_QALY_population <- function(utility,
 
   dat <- list(age = age,
               utility = utility,
-              time_horizon = time_horizons,
               intervals = intervals,
               start_delay = start_delay,
               discount_rate = discount_rate)
@@ -183,7 +166,7 @@ calc_QALY_population <- function(utility,
 
   mem_calc_QALY <-
     memoise(function(...)
-      op(calc_QALY(...)))
+      op(unlist(calc_QALY(...))))
 
   for (i in seq_len(n_pop)) {
 

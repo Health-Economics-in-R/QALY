@@ -24,6 +24,8 @@ fillin_trailing_utilities <- function(utility,
 
 #' fillin_utilities
 #'
+#' intervals takes precedence over time_horizon
+#'
 #' @param utility
 #' @param intervals
 #' @param time_horizon
