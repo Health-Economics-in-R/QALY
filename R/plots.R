@@ -86,12 +86,6 @@ plot_QALY <- function(QALYs,
 #' @rdname plot
 #' @export
 #'
-plot <- function(QALYs) UseMethod("plot")
-
-
-#' @rdname plot
-#' @export
-#'
 plot.QALYs <- function(QALYs,
                        overlay = FALSE,
                        XLIM = c(0, 80),

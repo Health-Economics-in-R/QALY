@@ -160,9 +160,6 @@ test_that("sum_res", {
 
 test_that("intervals", {
 
-
-
-
   # constant intervals and single time_horizon
   expect_equivalent(
     calc_QALY_population(utility = list(c(0.9, 0.9),
@@ -210,5 +207,67 @@ test_that("intervals", {
       discount_rate = 0,
       sum_res = FALSE
     ))
+
+
+  # fractional time intervals
+  expect_equal(
+    calc_QALY(intervals = c(2, 1.2),
+              utility = c(1, 1),
+              age = NA,
+              start_delay = 0,
+              discount_rate = 0),
+    calc_QALY(intervals = c(2.3, 1.2),
+              utility = c(1, 1),
+              age = NA,
+              start_delay = 0,
+              discount_rate = 0))
+
+  expect_error(
+    expect_equal(
+      calc_QALY(intervals = c(2, 1),
+                utility = c(1, 1),
+                age = NA,
+                start_delay = 0,
+                discount_rate = 0),
+      calc_QALY(intervals = c(2, 1.2),
+                utility = c(1, 1),
+                age = NA,
+                start_delay = 0,
+                discount_rate = 0)))
+
+  expect_equal(
+    calc_QALY(intervals = matrix(c(2.2, 3.3, 1.1), nrow = 1),
+              utility = c(1, 1, 1),
+              age = NA,
+              start_delay = 0,
+              discount_rate = 0),
+    calc_QALY(intervals = c(2.2, 3.3, 1.1),
+              utility = c(1, 1, 1),
+              age = NA,
+              start_delay = 0,
+              discount_rate = 0))
+
+  expect_equal(
+    calc_QALY(intervals = c(0.2, 1, 2.86),
+              utility = c(1, 1, 1),
+              age = NA,
+              start_delay = 0,
+              discount_rate = 0),
+    c(1,1,1,0.86))
+
+    expect_equal(
+      calc_QALY(intervals = c(0.99, 0.5),
+                utility = c(1, 1),
+                age = NA,
+                start_delay = 0,
+                discount_rate = 0),
+      0.5)
+
+    expect_equal(calc_QALY(intervals = c(0.99),
+                           utility = c(1),
+                           age = NA,
+                           start_delay = 0,
+                           discount_rate = 0), 0.99)
+
 })
 

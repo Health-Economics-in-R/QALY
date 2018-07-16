@@ -41,7 +41,7 @@ fillin_utilities <- function(utility,
 
   } else if (any(is.na(intervals))) {
     return(fillin_trailing_utilities(utility,
-                                     time_horizon))
+                                     ceiling(time_horizon)))
   } else {
     return(expand_utilities(utility,
                             intervals))
@@ -61,5 +61,5 @@ fillin_utilities <- function(utility,
 expand_utilities <- function(utility,
                              intervals) {
 
-  rep(utility, times = intervals)
+  rep(utility, times = ceiling(intervals))
 }

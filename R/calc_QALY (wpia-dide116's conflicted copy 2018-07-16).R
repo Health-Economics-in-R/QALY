@@ -44,15 +44,25 @@ calc_QALY <- function(utility = NA,
                       discount_rate = 0.035,
                       utility_method = "add"){
 
-  MATCH_CALL <- as.list(match.call())
-
   if (is.na(time_horizon) & any(is.na(intervals))) stop("Error: missing a time argument.")
 
   if (!is.na(time_horizon) && time_horizon == 0) return(0)
 
-  if (is.na(time_horizon)) time_horizon <- sum(intervals)
+  if (is.matrix(intervals)) intervals <- c(intervals)
 
-  time_horizon_years <- ceiling(time_horizon)
+  remainder <- NULL
+
+  if (is.na(time_horizon)) {
+
+    time_horizon <- sum(intervals)
+    if (tail(unlist(intervals), 1) %% 1 != 0) remainder <- tail(unlist(intervals), 1) %% 1
+    time_horizon_whole <- sum(intervals) - ifelse(is.null(remainder), 0, remainder)
+
+  } else {
+
+    if (time_horizon %% 1 != 0) remainder <- time_horizon %% 1
+    time_horizon_whole <- floor(time_horizon)
+  }
 
   HSUV_method <- HSUV(method = utility_method)
 
@@ -65,9 +75,9 @@ calc_QALY <- function(utility = NA,
   hw <- do.call(health_weights, MATCH_CALL)
 
   QALY <- vector(mode = 'numeric',
-                 length = time_horizon_years)
+                 length = length(period))
 
-  for (i in seq_len(time_horizon_years)) {
+  for (i in seq_along(QALY)) {
 
     QALY[i] <- hw$period[i] * HSUV_method(hw$utility[i], hw$QoL[i]) * discountfactor()
   }
@@ -76,10 +86,10 @@ calc_QALY <- function(utility = NA,
 }
 
 
-temporal_weights <- function(age,
-                             time_horizon,
-                             utility,
-                             intervals) {
+health_weights <- function(age,
+                           time_horizon,
+                           utility,
+                           intervals) {
 
   time_horizon_years <- ceiling(time_horizon)
 
@@ -87,9 +97,9 @@ temporal_weights <- function(age,
 
   res$utility <- fillin_utilities(utility,
                                   intervals,
-                                  time_horizon_years)
+                                  time_horizon)
 
-  res$period <- c(rep(1, time_horizon), tail(intervals, 1) %% 1)
+  res$period <- c(rep(1, time_horizon_whole), remainder)
 
   return(res)
 }

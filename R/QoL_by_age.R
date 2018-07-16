@@ -1,6 +1,8 @@
 
 #' QoL_by_age
 #'
+#' Quality of Life adjustment for age
+#'
 #' @param age
 #' @param time_horizon
 #'
@@ -10,6 +12,8 @@
 #' @examples
 QoL_by_age <- function(age,
                        time_horizon) {
+
+  if (is.na(age)) return(rep(1, time_horizon))
 
   lookup <- Kind1998_agegroups_QoL
 
