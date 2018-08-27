@@ -8,8 +8,7 @@ test_that("simple cases", {
 
   expect_equivalent(inflation_adjust_cost(from_year,
                                           to_year,
-                                          from_cost,
-                                          inflation_data = NA),
+                                          from_cost),
                     10*1.035)
 
   expect_equivalent(inflation_adjust_cost(from_year,
