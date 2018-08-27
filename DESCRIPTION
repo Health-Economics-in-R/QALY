@@ -12,6 +12,8 @@ Imports:
     readr,
     datapkg,
     memoise,
+    assertr,
+    here
 Depends:
     dplyr,
     purrr

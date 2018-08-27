@@ -4,11 +4,14 @@
 #' Up to the present time inflated upwards.
 #'
 #' Option to use the
-#' \href{https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/562750/GDP_Deflators_Qtrly_National_Accounts_September_2016_update_v2.csv}{ONS GDP_Deflators_Qtrly_National_Accounts}
+#'
+#' \itemize{
+#'   \item \url{https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/562750/GDP_Deflators_Qtrly_National_Accounts_September_2016_update_v2.csv}{ONS GDP_Deflators_Qtrly_National_Accounts}
 #' (This document contains the latest gross domestic product (GDP) deflators.
 #' The GDP deflator can be viewed as a measure of general inflation in the domestic economy)
-#' or \href{https://www.pssru.ac.uk/pub/uc/uc2017/sources-of-information.pdf}{PSSRU annual inflation hospital and community health services}
-#' or a fixed 3.5\%.
+#'   \item \url{https://www.pssru.ac.uk/pub/uc/uc2017/sources-of-information.pdf}{PSSRU annual inflation hospital and community health services}
+#'  \item Fixed 3.5\%.
+#' }
 #'
 #' Can't download directly into function because the .csv on the website is too messy as-is.
 #' This would be good to do though so that can always use latest version.
@@ -22,7 +25,13 @@
 #' @param reference Source of data (string)
 #' @param inflation_data NA default is fixed 3.5\% rate of inflation, 'GDP_deflators', 'HCHS_pay' or 'HCHS_price'.
 #'
-#' @return
+#' @return Inflated cost (scalar), with attributes:
+#' \itemize{
+#'   \item `from_year`
+#'   \item `to_year`
+#'   \item `from_cost`
+#'   \item `reference`
+#'  }
 #' @export
 #'
 #' @examples
@@ -46,7 +55,7 @@ inflation_adjust_cost <- function(from_year,
                                   to_year,
                                   from_cost,
                                   reference = NA,
-                                  inflation_data = NA){
+                                  inflation_data = 0.035){
 
   ##TODO##
   # the webpage defaltor file is too messy- with comments etc- to use as raw data
@@ -59,48 +68,30 @@ inflation_adjust_cost <- function(from_year,
 
   if (from_year %% 1 != 0) stop("From date must be an integer valued whole year")
   if (to_year %% 1 != 0) stop("To date must be an integer valued whole year")
-  if (from_cost < 0) stop("Cost must be greater than 0")
+  if (from_cost < 0) stop("Cost must be non-negative")
 
-  if (is.na(inflation_data)) inflation_data <- 0.035
+  data_sources <- dir(system.file("extdata", package = "QALY"))
+
+  if (!(inflation_data %in% data_sources || is_prob(inflation_data))) {
+
+    stop("inflation_data not allowed")
+  }
 
   num_years <- to_year - from_year
 
-  if (is.numeric(inflation_data) &&
-      length(inflation_data) == 1 &&
-      inflation_data <= 1 &&
-      inflation_data >= 0) {
+  if (inflation_data %in% data_sources) {
 
-    data <- NULL
-    data$adjustment <- rep(inflation_data, num_years)
-    from_row <- 0
-
-  } else if (inflation_data == "GDP_deflators") {
-
-    data_files <- system.file("extdata/GDP_deflators", package = "QALY")
+    data_files <- system.file(paste("extdata", inflation_data, sep = "/"), package = "QALY")
     datapkg_data <- datapkg::datapkg_read(data_files)
-    data <- datapkg_data$data$GDP_deflators
-    data$adjustment <- data$`prop change on previous year`
-    from_row <- which(data$year == from_year)
-
-  } else if (inflation_data == "HCHS_price") {
-
-    data_files <- system.file("extdata/annual_inflation_HCHS", package = "QALY")
-    datapkg_data <- datapkg::datapkg_read(data_files)
-    data <- datapkg_data$data$annual_inflation_HCHS
-    data$adjustment <- data$prop_change_from_prev_year_price
-    from_row <- which(data$year == from_year)
-
-  } else if (inflation_data == "HCHS_pay") {
-
-    data_files <- system.file("extdata/annual_inflation_HCHS", package = "QALY")
-    datapkg_data <- datapkg::datapkg_read(data_files)
-    data <- datapkg_data$data$annual_inflation_HCHS
-    data$adjustment <- data$prop_change_from_prev_year_pay
+    data <- datapkg_data$data[[inflation_data]]
+    data$adjustment <- data$prop_change_from_prev_year
     from_row <- which(data$year == from_year)
 
   } else {
 
-    stop("inflation_data not allowed")
+    data <- NULL
+    data$adjustment <- rep(inflation_data, num_years)
+    from_row <- 0
   }
 
   to_cost <- from_cost

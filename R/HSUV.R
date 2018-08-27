@@ -1,13 +1,15 @@
 
 #' Health State Utility Value
 #'
-#' http://nicedsu.org.uk/wp-content/uploads/2016/03/TSD12-Utilities-in-modelling-FINAL.pdf
+#' Utilities can be combined in different ways to give an overall utility.
+#'
+#' \url{http://nicedsu.org.uk/wp-content/uploads/2016/03/TSD12-Utilities-in-modelling-FINAL.pdf}
 #'
 #' TODO: Adjusted decrement estimator
 #' TODO: Combination model
 #'
 #' @param method additive, multiplicative or minimum
-#' @param ...
+#' @param ... One or more utilities to combine
 #'
 #' @return
 #' @export

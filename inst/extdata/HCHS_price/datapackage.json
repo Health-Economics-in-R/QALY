@@ -2,8 +2,8 @@
   "name": "data",
   "resources": [
     {
-      "path": "data/GDP_deflators.csv",
-      "name": "GDP_deflators",
+      "path": "data/HCHS_price.csv",
+      "name": "HCHS_price",
       "schema": {
         "fields": [
           {
@@ -11,11 +11,7 @@
             "type": "integer"
           },
           {
-            "name": "GDP_deflators",
-            "type": "number"
-          },
-          {
-            "name": "percent_change_from_prev_year",
+            "name": "HCHS_price",
             "type": "number"
           },
           {

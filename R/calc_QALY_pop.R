@@ -81,28 +81,6 @@ calc_QALY <- function(utility = NA,
 }
 
 
-is_new_year <- function(cumul_current, t) {
-
-  cumul_new <- cumul_current + t
-  floor(cumul_new) > floor(cumul_current)
-}
-
-
-get_remainder <- function(intervals) {
-
-  last_value <- tail(unlist(intervals), 1)
-
-  if (last_value %% 1 != 0) {
-
-    remainder <- last_value %% 1
-  } else {
-
-    remainder <- NULL
-  }
-  return(remainder)
-}
-
-
 #' @title Calculate QALYs for population
 #'
 #' @description This is a wrapper function for \code{calc_QALY} over
@@ -166,7 +144,8 @@ calc_QALY_population <- function(utility,
 
   mem_calc_QALY <-
     memoise(function(...)
-      op(unlist(calc_QALY(...))))
+      op(unlist(calc_QALY(...)))
+    )
 
   for (i in seq_len(n_pop)) {
 
