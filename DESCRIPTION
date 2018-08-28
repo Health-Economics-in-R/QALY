@@ -17,7 +17,9 @@ Imports:
 Depends:
     dplyr,
     purrr
-Remotes: ropenscilabs/datapkg
+Remotes:
+    ropenscilabs/datapkg,
+    ropenscilabs/jsonvalidate
 Suggests:
     testthat
 RoxygenNote: 6.0.1

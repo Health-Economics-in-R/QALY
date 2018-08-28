@@ -17,20 +17,20 @@
 #' This would be good to do though so that can always use latest version.
 #' ##TODO: webscraping? regular expressions?
 #'
-#' \deqn{(1 + i_1)(1 + i_2) \cdots (1 + i_n) \times C}
+#' \deqn{(1 + i_{1})(1 + i_{2}) \cdots (1 + i_{n}) \times C}
 #'
 #' @param from_year Date of cost to convert from
 #' @param to_year Date to convert cost to
 #' @param from_cost Cost at \code{from_year}
 #' @param reference Source of data (string)
-#' @param inflation_data NA default is fixed 3.5\% rate of inflation, 'GDP_deflators', 'HCHS_pay' or 'HCHS_price'.
+#' @param inflation_data NA default is fixed 3.5\% rate of inflation, \code{GDP_deflators}, \code{HCHS_pay} or \code{HCHS_price}.
 #'
 #' @return Inflated cost (scalar), with attributes:
 #' \itemize{
-#'   \item `from_year`
-#'   \item `to_year`
-#'   \item `from_cost`
-#'   \item `reference`
+#'   \item \code{from_year}
+#'   \item \code{to_year}
+#'   \item \code{from_cost}
+#'   \item \code{reference}
 #'  }
 #' @export
 #'
