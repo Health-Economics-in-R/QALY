@@ -81,7 +81,7 @@ inflation_adjust_cost <- function(from_year,
 
   if (inflation_data %in% data_sources) {
 
-    data_files <- system.file(paste("extdata", inflation_data, sep = "/"), package = "QALY")
+    data_files <- system.file("extdata", inflation_data, package = "QALY")
     datapkg_data <- datapkg::datapkg_read(data_files)
     data <- datapkg_data$data[[inflation_data]]
     data$adjustment <- data$prop_change_from_prev_year

@@ -21,5 +21,6 @@ Remotes:
     ropenscilabs/datapkg,
     ropenscilabs/jsonvalidate
 Suggests:
-    testthat
+    testthat,
+    covr
 RoxygenNote: 6.0.1
