@@ -1,3 +1,6 @@
+[![Build
+Status](https://travis-ci.org/n8thangreen/QALY.svg?branch=master)](https://travis-ci.org/n8thangreen/QALY)
+
 `QALY`
 ======
 
