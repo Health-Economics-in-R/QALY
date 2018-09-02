@@ -1,6 +1,9 @@
 [![Build
 Status](https://travis-ci.org/n8thangreen/QALY.svg?branch=master)](https://travis-ci.org/n8thangreen/QALY)
 
+[![codecov](https://codecov.io/gh/n8thangreen/QALY/branch/master/graph/badge.svg)](https://codecov.io/gh/n8thangreen/QALY)
+
+
 `QALY`
 ======
 
