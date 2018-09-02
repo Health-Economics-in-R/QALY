@@ -19,7 +19,8 @@ Depends:
     purrr
 Remotes:
     ropenscilabs/datapkg,
-    ropenscilabs/jsonvalidate
+    ropenscilabs/jsonvalidate,
+    r-lib/covr
 Suggests:
     testthat,
     covr
