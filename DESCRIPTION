@@ -1,7 +1,7 @@
 Package: QALY
 Type: Package
 Title: Calculate Quality Adjusted Life Years (QALYs) Gains with Discounting and Inflated Costs
-Version: 0.1.0
+Version: 0.1.0.9000
 Author: Nathan Green
 Maintainer: Nathan Green <nathan.green@imperial.ac.uk>
 Description: S3 package for QALY calculation and plotting.
