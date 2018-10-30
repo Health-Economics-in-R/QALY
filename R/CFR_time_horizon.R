@@ -5,7 +5,7 @@
 #' function to calculate the total QALYs.
 #' DRY priniciple.
 #'
-#' @param adjusted_life_years An object of class adjusted_life_years
+#' @param adj_lyears An object of class adjusted_life_years
 #' @param cfr_modelframe Data frame with CFR and ages
 #'
 #' @return An object of class adjusted_life_years
@@ -25,20 +25,22 @@
 #'
 #' CFR_time_horizon.adjusted_life_years(AdjLifeYears, cfr_modelframe)
 #'
-CFR_time_horizon.adjusted_life_years <- function(adjusted_life_years, cfr_modelframe){
+CFR_time_horizon.adjusted_life_years <- function(adj_lyears,
+                                                 cfr_modelframe){
 
-  if(!is.data.frame(cfr_modelframe)) stop("Case fatality rate data must be a data frame.")
+  if (!is.data.frame(cfr_modelframe))
+    stop("Case fatality rate data must be a data frame.")
 
   cfr_name <- attr(x, "names")[1]
   age_name <- attr(x, "names")[2]
 
-  agei <- adjusted_life_years$age
+  agei <- adj_lyears$age
   death_date <- 0
 
-  while(death_date%%1==0){
+  while (death_date %% 1 == 0) {
 
     cfr_subset <- subset(x = cfr_modelframe,
-                         subset = age_name==agei,
+                         subset = age_name == agei,
                          select = cfr_name)
 
     death_date <- death_date + ifelse(cfr_subset < runif(1), 1, 0.5)
@@ -46,12 +48,14 @@ CFR_time_horizon.adjusted_life_years <- function(adjusted_life_years, cfr_modelf
     agei <- agei + 1
   }
 
-  adjusted_life_years$time_horizon <- min(adjusted_life_years$time_horizon, death_date)
+  adj_lyears$time_horizon <- min(adj_lyears$time_horizon,
+                                          death_date)
 
-  adjusted_life_years$utility <- fillin_missing_utilities(adjusted_life_years$utility,
-                                                          adjusted_life_years$time_horizon)
+  adj_lyears$utility <-
+    fillin_missing_utilities(adj_lyears$utility,
+                             adj_lyears$time_horizon)
 
-  adjusted_life_years$death <- TRUE
+  adj_lyears$death <- TRUE
 
-  return(adjusted_life_years)
+  return(adj_lyears)
 }
