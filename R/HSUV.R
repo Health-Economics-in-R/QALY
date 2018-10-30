@@ -3,15 +3,25 @@
 #'
 #' Utilities can be combined in different ways to give an overall utility.
 #'
-#' \url{http://nicedsu.org.uk/wp-content/uploads/2016/03/TSD12-Utilities-in-modelling-FINAL.pdf}
 #'
 #' TODO: Adjusted decrement estimator
 #' TODO: Combination model
 #'
-#' @param method additive, multiplicative or minimum
+#' @param method Options are:
+#' \itemize{
+#'  \item Additive
+#' \deqn{u^{add} = u_a + u_b - 1}
+#'  \item Multiplicative
+#' \deqn{u^{mult} = u_a u_b}
+#'  \item Minimum
+#' \deqn{u^{min} = \min{u_a, u_b}}
+#' }
+#'
 #' @param ... One or more utilities to combine
 #'
-#' @return
+#' @references \url{http://nicedsu.org.uk/wp-content/uploads/2016/03/TSD12-Utilities-in-modelling-FINAL.pdf}
+#'
+#' @return function
 #' @export
 #'
 #' @examples
