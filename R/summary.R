@@ -1,0 +1,4 @@
+
+summary.QALY <- function() {
+
+}

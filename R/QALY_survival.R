@@ -6,7 +6,7 @@
 #'
 #' @details Uses the following formula:
 #'
-#' \deqn{ \sum S(t) Q(t) }
+#' \deqn{ QALY = \int_0^\infty S(t) u(t) dt \approx \sum_0^100 S(t) u(t) }
 #'
 #' @param utility Vector of values between 0 and 1 (1 - utility loss)
 #' @param intervals Time intervals for each utility
@@ -27,7 +27,7 @@
 #'           intervals = 49)
 #'
 QALY_survival <- function(utility = NA,
-                          intervals = NA,
+                          gender = NA,
                           age = NA,
                           start_delay = 0,
                           discount_rate = 0.035,
@@ -35,11 +35,16 @@ QALY_survival <- function(utility = NA,
 
   ##TODO:...
   #
-  # if (any(is.na(intervals))) stop("Error: missing a time argument.")
-  #
-  # if (is.matrix(intervals)) intervals <- c(intervals)
-  #
   # HSUV_method <- HSUV(method = utility_method)
+  #
+  # start_age <- age + start_delay
+  #
+  # data(surv_data)
+  #
+  #  S <-
+  #    surv_data %>%
+  #    dplyr::filter(age >= start_age) %>%
+  #    dplyr::select(gender)
   #
   # discountfactor <- make_discount(discount_rate)
   #
@@ -47,28 +52,15 @@ QALY_survival <- function(utility = NA,
   #   discountfactor()
   # }
   #
-  # QALY <- vector(mode = 'list',
-  #                length = length(intervals))
+  # QALY <- vector(mode = 'numeric',
+  #                length = length(S))
   #
-  # time_elapsed  <- 0
-  # cumul_current <- 0
+  #   QoL <- QoL_by_age(start_age, length(S))
   #
-  # for (i in seq_along(intervals)) {
+  # for (i in seq_along(S)) {
   #
-  #   period <- c(rep(1, intervals[i]), get_remainder(intervals[i]))
-  #
-  #   QoL <- QoL_by_age(age + time_elapsed, ceiling(intervals[i]))
-  #
-  #   for (t in seq_along(period)) {
-  #
-  #     if (is_new_year(cumul_current, t)) discount_t <- discountfactor()
-  #     cumul_current <- cumul_current + t
-  #
-  #     QALY[[i]][t] <- period[t] * HSUV_method(utility[i], QoL[t]) * discount_t
+  #     QALY[t] <- S[t] * HSUV_method(utility[t], QoL[t]) * discountfactor()
   #   }
-  #
-  #   time_elapsed <- time_elapsed + intervals[i]
-  # }
   #
   # return(QALY)
 }

@@ -1,20 +1,36 @@
 
-#' Adjusted Life Years Object Constructor
+#' Adjusted Life-Years Object Constructor
 #'
-#' For use as input to the QALY and DALY functions.
+#' For use as input to the QALY (and DALY) functions.
+#' Want to provide set-up info in different ways but which gives us all the necessary info to go calc QALYs later.
+#' individual level data.
+#' Don’t need to supply all of these otherwise there would be redundancy and possible conflicts. E.g. time horizon can be got from start and end year.
+#' Need to calc QoL which is discounting due to age from start to end year.
 #'
 #' @param start_year Calendar year to begin calculation
 #' @param end_year Calendar year to end calculation
 #' @param delay If the start_year is in the future then the
 #'              first discounting is not 1 but smaller accordingly (positive integer)
 #'              We could alternatively define year_now
-#' @param age Age at start of period
+#' @param age Age at start of period (could be an age group)
 #' @param time_horizon Number of time periods from start to end date
-#' @param utility Proportion health detriment
-#' @param discount_rate Fixed proportion reduction over time
+#' @param utility Proportion health detriment. This may change over time. Could provide as a list of length end-start or as say list(c(2,3), c(u1,u2)) like in WinBUGs data.
+#' @param discount_rate Fixed proportion reduction over time or a (continuous) function e.g. negative exponential
 #' @param utility_method Should the yearly QALYs be summed to a scalar? \code{add} or \code{prod}
 #'
 #' @return Object of class adjusted_life_years
+#' \itemize{
+#'  \item start_year
+#'  \item end_year
+#'  \item delay
+#'  \item age
+#'  \item time_horizon
+#'  \item utility
+#'  \item QoL
+#'  \item discount_rate
+#'  \item death
+#'  \item utility_method
+#'  }
 #' @export
 #'
 #' @seealso \code{\link{QALY}}, \code{\link{DALY}}

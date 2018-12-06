@@ -5,6 +5,7 @@ Version: 0.1.0.9000
 Author: Nathan Green
 Maintainer: Nathan Green <nathan.green@imperial.ac.uk>
 Description: S3 package for QALY calculation and plotting.
+URL: https://github.com/n8thangreen/QALY
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

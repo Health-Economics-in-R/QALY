@@ -63,22 +63,7 @@ functions for the most common operations involving QALYs.
 Basic example
 -------------
 
-    library(QALY)
-
-    #> Loading required package: dplyr
-
-    #> 
-    #> Attaching package: 'dplyr'
-
-    #> The following objects are masked from 'package:stats':
-    #> 
-    #>     filter, lag
-
-    #> The following objects are masked from 'package:base':
-    #> 
-    #>     intersect, setdiff, setequal, union
-
-    #> Loading required package: purrr
+    suppressMessages(library(QALY))
 
 Combined two co-morbidity utilities using the product approach:
 
@@ -102,14 +87,17 @@ Calculate QALYS:
 
     QALYs <- total_QALYs(AdjLifeYears)
 
-Print a graph of the QALYs over time:
+    print(QALYs)
+    summary(QALYs)
+
+Print a graph of the QALYs over time: using ggplot2?
 
     plot(QALYs)
 
-![](README_files/figure-markdown_strict/unnamed-chunk-7-1.png)
+![](README_files/figure-markdown_strict/unnamed-chunk-8-1.png)
 
 See package
-[Vignette](http://htmlpreview.github.io/?https://github.com/n8thangreen/QALY/blob/master/inst/doc/vignette_main.html)
+[vignette](http://htmlpreview.github.io/?https://github.com/n8thangreen/QALY/blob/master/inst/doc/vignette_main.html)
 for more details and examples.
 
 License

@@ -72,7 +72,7 @@ operations involving QALYs.
 ## Basic example
 
 ```{r}
-library(QALY)
+suppressMessages(library(QALY))
 ```
 
 Combined two co-morbidity utilities using the product approach:
@@ -101,12 +101,20 @@ Calculate QALYS:
 QALYs <- total_QALYs(AdjLifeYears)
 ```
 
+```{r eval=F}
+print(QALYs)
+summary(QALYs)
+```
+
+
 Print a graph of the QALYs over time:
+using ggplot2?
+
 ```{r}
 plot(QALYs)
 ```
 
-See package [Vignette](http://htmlpreview.github.io/?https://github.com/n8thangreen/QALY/blob/master/inst/doc/vignette_main.html) for more details and examples.
+See package [vignette](http://htmlpreview.github.io/?https://github.com/n8thangreen/QALY/blob/master/inst/doc/vignette_main.html) for more details and examples.
 
 ## License
 
