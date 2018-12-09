@@ -17,8 +17,7 @@
 #'
 #' @return
 #' @export
-#' @seealso \code{\link{calc_QALY_CFR}},
-#'          \code{\link{calc_QALY_population}}
+#' @seealso \code{\link{calc_QALY_population}}
 #'          \code{\link{total_QALYs}}
 #'
 #' @examples
@@ -32,6 +31,8 @@ QALY_survival <- function(utility = NA,
                           start_delay = 0,
                           discount_rate = 0.035,
                           utility_method = "add"){
+
+  load(here::here("data", "lifetable.RData"))
 
   ##TODO:...
   #
