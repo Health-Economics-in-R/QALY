@@ -69,15 +69,18 @@ plot_QALY <- function(QALYs,
 #' @rdname plot
 #' @export
 #'
-plot.QALYs <- function(QALYs,
+plot.HRQoL <- function(HRQoL_year,
                        overlay = FALSE,
-                       XLIM = c(0, 80),
+                       XLIM = NA,
                        COL = "light grey",
                        age_annotate = FALSE){
 
   # append final year
-  yearly_QALYs <- c(attr(QALYs,"yearly_QALYs"),
-                    min(attr(QALYs,"yearly_QALYs")))
+  yearly_QALYs <- c(HRQoL_year,
+                    min(HRQoL_year))
+
+
+  if (is.na(XLIM)) XLIM <- c(0, sum(!is.na(HRQoL_year)))
 
   par(new = overlay)
 
@@ -97,10 +100,10 @@ plot.QALYs <- function(QALYs,
   # annotate start and end ages
   if (age_annotate) {
 
-    text(1, yearly_QALYs[1], attr(QALYs,"adjusted_life_years")$age)
-    text(x = length(yearly_QALYs),
-         y = yearly_QALYs[length(yearly_QALYs)],
-         labels = as.character(attr(QALYs,"adjusted_life_years")$age + length(yearly_QALYs) - 1))
+    text(1, HRQoL_year[1], attr(HRQoL_year, "adjusted_life_years")$age)
+    text(x = sum(!is.na(HRQoL_year)),
+         y = HRQoL_year[length(HRQoL_year[!is.na(HRQoL_year)])],
+         labels = as.character(attr(HRQoL_year, "adjusted_life_years")$age + length(HRQoL_year) - 1))
   }
 }
 

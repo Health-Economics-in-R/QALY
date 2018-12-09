@@ -65,6 +65,10 @@ Basic example
 
     suppressMessages(library(QALY))
 
+    #> Warning: package 'dplyr' was built under R version 3.4.4
+
+    #> Warning: package 'purrr' was built under R version 3.4.4
+
 Combined two co-morbidity utilities using the product approach:
 
     HSUV_prod <- HSUV(method = "prod") 
@@ -85,14 +89,72 @@ information needed to do subsequent operations:
 
 Calculate QALYS:
 
-    QALYs <- total_QALYs(AdjLifeYears)
+    HRQoL_year <- total_QALYs(AdjLifeYears)
 
-    print(QALYs)
-    summary(QALYs)
+    print(HRQoL_year)
 
-Print a graph of the QALYs over time: using ggplot2?
+    #>   [1] 0.5900000 0.5700483 0.5507713 0.5321462        NA        NA        NA
+    #>   [8]        NA        NA        NA        NA        NA        NA        NA
+    #>  [15]        NA        NA        NA        NA        NA        NA        NA
+    #>  [22]        NA        NA        NA        NA        NA        NA        NA
+    #>  [29]        NA        NA        NA        NA        NA        NA        NA
+    #>  [36]        NA        NA        NA        NA        NA        NA        NA
+    #>  [43]        NA        NA        NA        NA        NA        NA        NA
+    #>  [50]        NA        NA        NA        NA        NA        NA        NA
+    #>  [57]        NA        NA        NA        NA        NA        NA        NA
+    #>  [64]        NA        NA        NA        NA        NA        NA        NA
+    #>  [71]        NA        NA        NA        NA        NA        NA        NA
+    #>  [78]        NA        NA        NA        NA        NA        NA        NA
+    #>  [85]        NA        NA        NA        NA        NA        NA        NA
+    #>  [92]        NA        NA        NA        NA        NA        NA        NA
+    #>  [99]        NA        NA
+    #> attr(,"class")
+    #> [1] "HRQoL"   "numeric"
+    #> attr(,"adjusted_life_years")
+    #> $start_year
+    #> [1] 2016
+    #> 
+    #> $end_year
+    #> [1] 2020
+    #> 
+    #> $delay
+    #> [1] 0
+    #> 
+    #> $age
+    #> [1] 33
+    #> 
+    #> $time_horizon
+    #> [1] 4
+    #> 
+    #> $utility
+    #> [1] 0.72 0.72 0.72 0.72
+    #> 
+    #> $QoL
+    #> [1] 0.87 0.87 0.87 0.87 0.87
+    #> 
+    #> $discount_rate
+    #> [1] 0.035
+    #> 
+    #> $death
+    #> [1] NA
+    #> 
+    #> $utility_method
+    #> [1] "add"
+    #> 
+    #> $period
+    #> [1] 1 1 1 1
+    #> 
+    #> attr(,"class")
+    #> [1] "adjusted_life_years" "list"
 
-    plot(QALYs)
+    summary(HRQoL_year)
+
+    #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+    #>  0.5322  0.5461  0.5604  0.5607  0.5750  0.5900      96
+
+Print a graph of the HRQoL over time: using ggplot2?
+
+    plot(HRQoL_year)
 
 ![](README_files/figure-markdown_strict/unnamed-chunk-8-1.png)
 

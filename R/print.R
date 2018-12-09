@@ -1,10 +1,14 @@
 
-#' print.QALY
+#' print.HRQoL
+#'
+#' @param x
 #'
 #' @return
 #' @export
 #'
 #' @examples
-print.QALY <- function() {
+print.HRQoL <- function(x) {
 
+  print.default(x)
 }
+

@@ -98,20 +98,20 @@ AdjLifeYears <- adjusted_life_years(
 
 Calculate QALYS:
 ```{r}
-QALYs <- total_QALYs(AdjLifeYears)
+HRQoL_year <- total_QALYs(AdjLifeYears)
 ```
 
-```{r eval=F}
-print(QALYs)
-summary(QALYs)
+```{r}
+print(HRQoL_year)
+summary(HRQoL_year)
 ```
 
 
-Print a graph of the QALYs over time:
+Print a graph of the HRQoL over time:
 using ggplot2?
 
 ```{r}
-plot(QALYs)
+plot(HRQoL_year)
 ```
 
 See package [vignette](http://htmlpreview.github.io/?https://github.com/n8thangreen/QALY/blob/master/inst/doc/vignette_main.html) for more details and examples.

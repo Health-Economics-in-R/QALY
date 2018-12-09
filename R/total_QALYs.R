@@ -43,8 +43,8 @@ total_QALYs.adjusted_life_years <- function(adj_life_yrs){
 
   max_year <- 100
 
-  yearly_QALYs <- vector(mode = 'numeric',
-                         length = adj_life_yrs$time_horizon)
+  yearly_QALY <- vector(mode = 'numeric',
+                        length = adj_life_yrs$time_horizon)
 
   HSUV_method <- HSUV(method = adj_life_yrs$utility_method)
 
@@ -62,17 +62,17 @@ total_QALYs.adjusted_life_years <- function(adj_life_yrs){
 
   for (i in seq_len(adj_life_yrs$time_horizon)) {
 
-    yearly_QALYs[i] <-
+    yearly_QALY[i] <-
       purrr::map(adj_life_yrs, i) %>%
       period_QALY() * discountfactor()
   }
 
   # fill later years so same length for all individuals
-  yearly_QALYs <-  c(yearly_QALYs, rep(NA, max_year - adj_life_yrs$time_horizon))
+  yearly_QALY <- c(yearly_QALY, rep(NA, max_year - adj_life_yrs$time_horizon))
 
-  attr(yearly_QALYs, "adjusted_life_years") <- adj_life_yrs
-  class(yearly_QALYs) <- c("QALY", class(yearly_QALYs))
+  class(yearly_QALY) <- append("HRQoL", class(yearly_QALY))
+  attr(yearly_QALY, "adjusted_life_years") <- adj_life_yrs
 
-  return(yearly_QALYs)
+  return(yearly_QALY)
 }
 
