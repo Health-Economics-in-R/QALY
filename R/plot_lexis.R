@@ -1,15 +1,15 @@
 
-#' plot_lexis.adjusted_life_years
+#' plot_lexis.person_health_years
 #'
 #' ##TODO: plot functions aren't finished
 #'
-#' @param adjusted_life_years
+#' @param person_health_years
 #'
 #' @return
 #' @export
 #'
 #' @examples
-plot_lexis.adjusted_life_years <- function(adjusted_life_years){
+plot_lexis.person_health_years <- function(person_health_years){
 
   require(LexisPlotR)
 
@@ -19,6 +19,6 @@ plot_lexis.adjusted_life_years <- function(adjusted_life_years){
   lexis.lifeline(lg = lg,
                  lineends = TRUE,
                  lwd = 2,
-                 entry = as.Date(paste(adjusted_life_years$start_year, "01", "01", sep = "-")),
-                 exit = as.Date(paste(adjusted_life_years$end_year, "01", "01", sep = "-")))
+                 entry = as.Date(paste(person_health_years$start_year, "01", "01", sep = "-")),
+                 exit = as.Date(paste(person_health_years$end_year, "01", "01", sep = "-")))
 }

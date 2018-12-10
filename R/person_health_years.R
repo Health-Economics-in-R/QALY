@@ -1,8 +1,8 @@
 
-#' Adjusted Life-Years Object Constructor
+#' Person health years object constructor
 #'
 #' For use as input to the QALY (and DALY) functions.
-#' Want to provide set-up info in different ways but which gives us all the necessary info to go calc QALYs later.
+#' Want to provide set-up info in different ways but which gives us all the necessary information to go calc QALYs later.
 #' individual level data.
 #' Don’t need to supply all of these otherwise there would be redundancy and possible conflicts. E.g. time horizon can be got from start and end year.
 #' Need to calc QoL which is discounting due to age from start to end year.
@@ -14,11 +14,11 @@
 #'              We could alternatively define year_now
 #' @param age Age at start of period (could be an age group)
 #' @param time_horizon Number of time periods from start to end date
-#' @param utility Proportion health detriment. This may change over time. Could provide as a list of length end-start or as say list(c(2,3), c(u1,u2)) like in WinBUGs data.
+#' @param utility Proportion health detriment. This may change over time. Could provide as a list of length end-start or as say \code{list(c(2,3), c(u1,u2))} like in WinBUGs data.
 #' @param discount_rate Fixed proportion reduction over time or a (continuous) function e.g. negative exponential
 #' @param utility_method Should the yearly QALYs be summed to a scalar? \code{add} or \code{prod}
 #'
-#' @return Object of class adjusted_life_years
+#' @return Object of class person_health_years
 #' \itemize{
 #'  \item start_year
 #'  \item end_year
@@ -37,22 +37,22 @@
 #'
 #' @examples
 #'
-#' AdjLifeYears <- adjusted_life_years(
-#'                     start_year = 2016,
-#'                     end_year = 2020,
-#'                     age = 33,
-#'                     time_horizon = NA,
-#'                     utility = 0.9,
-#'                     discount_rate = 0.035)
+#' personHealthYears <- person_health_years(
+#'                       start_year = 2016,
+#'                       end_year = 2020,
+#'                       age = 33,
+#'                       time_horizon = NA,
+#'                       utility = 0.9,
+#'                       discount_rate = 0.035)
 #'
-#' total_QALYs(AdjLifeYears)
+#' total_QALYs(personHealthYears)
 #' ## 2.913622
 #'
 #' \dontrun{
 #'  total_QALY(1)
-#'  ## "Error: Not an adjusted_life_years class input object."
+#'  ## "Error: Not an person_health_years class input object."
 #' }
-adjusted_life_years <- function(start_year = 0,
+person_health_years <- function(start_year = 0,
                                 end_year = NA,
                                 delay = 0,
                                 age = NA,
@@ -113,7 +113,7 @@ adjusted_life_years <- function(start_year = 0,
     QoL <- QoL_by_age(age, time_horizon)
   }
 
-  adjusted_life_years <- list(start_year = start_year,
+  person_health_years <- list(start_year = start_year,
                               end_year = end_year,
                               delay = delay,
                               age = age,
@@ -124,8 +124,8 @@ adjusted_life_years <- function(start_year = 0,
                               death = NA,
                               utility_method = utility_method)
 
-  class(adjusted_life_years) <- c("adjusted_life_years", class(adjusted_life_years))
+  class(person_health_years) <- c("person_health_years", class(person_health_years))
 
-  return(adjusted_life_years)
+  return(person_health_years)
 }
 
