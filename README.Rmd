@@ -2,7 +2,9 @@
 title: "QALY"
 author: "Nathan Green"
 date: "`r Sys.Date()`"
-output: md_document
+output:
+  html_document: 
+    keep_md: yes
 ---
 
 [![Build Status](https://travis-ci.org/n8thangreen/QALY.svg?branch=master)](https://travis-ci.org/n8thangreen/QALY)
@@ -19,9 +21,6 @@ knitr::opts_chunk$set(
   fig.width = 5,
   fig.height = 5)
 ```
-
-
-# QALY
 
 > A QALY is a QALY is a QALY
 
