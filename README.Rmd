@@ -86,18 +86,19 @@ TODO use expected remaining life time...
 Create a adjusted life-year type object which contains all the information needed to do subsequent operations:
 
 ```{r}
-AdjLifeYears <- adjusted_life_years(
-                    start_year = 2016,
-                    end_year = 2020,
-                    age = 33,
-                    time_horizon = NA,
-                    utility = tot_utility,
-                    discount_rate = 0.035)
+personHealthYears <-
+  person_health_years(
+    start_year = 2016,
+    end_year = 2020,
+    age = 33,
+    time_horizon = NA,
+    utility = tot_utility,
+    discount_rate = 0.035)
 ```
 
 Calculate QALYS:
 ```{r}
-HRQoL_year <- total_QALYs(AdjLifeYears)
+HRQoL_year <- total_QALYs(personHealthYears)
 ```
 
 ```{r}

@@ -84,19 +84,20 @@ Create a adjusted life-year type object which contains all the information neede
 
 
 ```r
-AdjLifeYears <- adjusted_life_years(
-                    start_year = 2016,
-                    end_year = 2020,
-                    age = 33,
-                    time_horizon = NA,
-                    utility = tot_utility,
-                    discount_rate = 0.035)
+personHealthYears <-
+  person_health_years(
+    start_year = 2016,
+    end_year = 2020,
+    age = 33,
+    time_horizon = NA,
+    utility = tot_utility,
+    discount_rate = 0.035)
 ```
 
 Calculate QALYS:
 
 ```r
-HRQoL_year <- total_QALYs(AdjLifeYears)
+HRQoL_year <- total_QALYs(personHealthYears)
 ```
 
 
@@ -122,7 +123,7 @@ print(HRQoL_year)
 #>  [99]        NA        NA
 #> attr(,"class")
 #> [1] "HRQoL"   "numeric"
-#> attr(,"adjusted_life_years")
+#> attr(,"person_health_years")
 #> $start_year
 #> [1] 2016
 #> 
@@ -157,7 +158,7 @@ print(HRQoL_year)
 #> [1] 1 1 1 1
 #> 
 #> attr(,"class")
-#> [1] "adjusted_life_years" "list"
+#> [1] "person_health_years" "list"
 ```
 
 ```r
