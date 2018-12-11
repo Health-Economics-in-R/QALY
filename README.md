@@ -1,7 +1,7 @@
 ---
 title: "QALY"
 author: "Nathan Green"
-date: "2018-12-10"
+date: "2018-12-11"
 output:
   html_document: 
     keep_md: yes
@@ -10,6 +10,7 @@ output:
 [![Build Status](https://travis-ci.org/n8thangreen/QALY.svg?branch=master)](https://travis-ci.org/n8thangreen/QALY)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/n8thangreen/QALY?branch=master&svg=true)](https://ci.appveyor.com/project/n8thangreen/QALY)
 [![Coverage status](https://codecov.io/gh/n8thangreen/QALY/branch/master/graph/badge.svg)](https://codecov.io/github/n8thangreen/QALY?branch=master)
+[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 
 
@@ -50,17 +51,16 @@ library(QALY)
 
 
 ## Motivation
-In cost-utility analyses the most commonly used unit of health is the QALY.
-The are others, most notably the diability-adjusted life-year (DALY), but these are not so ubiquitous.
-Calculation of QALY consists of time and utility components.
-Time may be some predefined time horizon or an individuals excess life time.
+In cost-utility analyses arguably the most commonly used unit of health outcome is the QALY.
+There are others, most notably the diability-adjusted life-year (DALY).
+Calculation of QALYs consist of time and utility components.
+Time may be some predefined time horizon or an individual's excess life time.
 The utilities are health preference measures scaled between 0 and 1.
-These can be derived from such things as patient recorded outcome measures (PROMs) using surveys such as EuroQol-5D (EQ-5D) or the Short Form-36D/Short Form-6D (SF-6D).
+These can be derived from such things as patient recorded outcome measures (PROMs), using surveys such as EuroQol-5D (EQ-5D) or the Short Form-36D/Short Form-6D (SF-6D).
 Co-morbidities, requiring some combining of utilities, may also be required.
 
 QALY calculation in cost-effectiveness analyses is often done in an ad-hoc, project-by-project way.
-The aim of this package is to standardise the calculations and provide an easy-to-use suite of functions for the most common
-operations involving QALYs.
+The aim of this package is to standardise these calculations and provide an easy-to-use suite of functions for the most common operations involving QALYs.
 
 
 ## Basic example
