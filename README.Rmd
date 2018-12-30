@@ -1,11 +1,7 @@
 ---
-title: "QALY"
-author: "Nathan Green"
-date: "`r Sys.Date()`"
-output:
-  html_document: 
-    keep_md: yes
+output: github_document
 ---
+
 
 [![Build Status](https://travis-ci.org/n8thangreen/QALY.svg?branch=master)](https://travis-ci.org/n8thangreen/QALY)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/n8thangreen/QALY?branch=master&svg=true)](https://ci.appveyor.com/project/n8thangreen/QALY)
@@ -13,6 +9,7 @@ output:
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, setup, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(
@@ -22,6 +19,7 @@ knitr::opts_chunk$set(
   fig.width = 5,
   fig.height = 5)
 ```
+# QALY
 
 > A QALY is a QALY is a QALY
 
@@ -46,7 +44,7 @@ Request welcome; please use [Issues](https://github.com/n8thangreen/QALY/issues)
 To install the development version from github:
 ```{r eval=FALSE}
 library(devtools)
-install_github("n8thangreen/QALY")
+install_github("Health-Economics-in-R/QALY")
 ```
 
 Then, to load the package, use:

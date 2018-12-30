@@ -1,35 +1,31 @@
 
 #' @title Calculate Quality-Adjusted Life Years
 #'
-#' @description  Discounted total QALYs upto a defined time horizon.
-#' This is a simpler function.
-#' An alternative Method is also available (see \code{\link{total_QALYs}}).
+#' @description  Discounted total QALYs up to a defined time horizon.
+#' This is a simpler, alternative function. See S3 Method also available (\code{\link{total_QALYs}}).
 #'
 #' @details Uses the following formula, for year  \code{i}:
 #'
-#' \deqn{ \sum prop_year(i) * utility(i) * QoL(age(i)) * discount_factor(i) }
+#' \deqn{ \sum interval(i) * utility(i) * QoL(age(i)) * discount(i) }
 #'
 #' for  \code{i} = 1, ..., \code{time_horizon}.
 #'
-#' \code{prop_year} is useful for fractions of years at the start and end of the period.
-#' However, since we may not know this then may not be necessary.
-#'
 #' @param utility Vector of values between 0 and 1 (1 - utility loss)
-#' @param intervals Time intervals for each utility
+#' @param intervals Time intervals for each utility, usually whole year i.e. 1. This is useful for fractions of years at the start and end of the period.
+#' However, since we may not know this then may not be necessary.
 #' @param age Year of age
 #' @param start_delay What time delay to origin, to shift discounting
-#' @param discount_rate default 3.5\%
-#' @param utility_method Should the yearly QALYs be summed to a scalar? \code{add} or \code{prod}
+#' @param discount_rate Default: 3.5\% per year
+#' @param utility_method How to combine utilities. Default: \code{add}, or \code{prod}
 #'
 #' @return
 #' @export
-#' @seealso \code{\link{calc_QALY_CFR}},
-#'          \code{\link{calc_QALY_population}}
-#'          \code{\link{total_QALYs}}
 #'
 #' @references Sassi, Franco, Health Policy and Planning, 5, 402-408, Calculating QALYs,
 #' comparing QALY and DALY calculations, volume 21, 2006
 #'
+#' @seealso \code{\link{calc_QALY_population}},
+#'          \code{\link{total_QALYs}}
 #' @examples
 #' calc_QALY(utility = 0.9,
 #'           age = 13,
