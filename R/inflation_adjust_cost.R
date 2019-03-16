@@ -19,6 +19,9 @@
 #'
 #' \deqn{(1 + i_{1})(1 + i_{2}) \cdots (1 + i_{n}) \times C}
 #'
+#' Clearly, for the same \code{i} each year this is simply
+#' \deqn{C(1 + i)^n}
+#'
 #' @param from_year Date of cost to convert from
 #' @param to_year Date to convert cost to
 #' @param from_cost Cost at \code{from_year}

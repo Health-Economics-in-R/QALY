@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Discounted Values Over Time — discount • QALY</title>
+<title>Discounted values over time — discount • QALY</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,11 +30,13 @@
 
 
 
-<meta property="og:title" content="Discounted Values Over Time — discount" />
+<meta property="og:title" content="Discounted values over time — discount" />
 
 <meta property="og:description" content="Dscounted value, e.g. cost or health (QALY), for each time point, e.g. year.
 E.g. a QALY in the future is worth less to us now because of 'interest'
-or conversely we'd need more QALYs now to have a QALY further in the future." />
+or conversely we'd need more QALYs now to have a QALY further in the future.
+Formula used is
+ $$1/(1 + d)^{y}$$" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -104,7 +106,7 @@ or conversely we'd need more QALYs now to have a QALY further in the future." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Discounted Values Over Time</h1>
+    <h1>Discounted values over time</h1>
     <small class="dont-index">Source: <a href='https://github.com/n8thangreen/QALY/blob/master/R/discount.R'><code>R/discount.R</code></a></small>
     <div class="hidden name"><code>discount.Rd</code></div>
     </div>
@@ -114,6 +116,8 @@ or conversely we'd need more QALYs now to have a QALY further in the future." />
     <p>Dscounted value, e.g. cost or health (QALY), for each time point, e.g. year.
 E.g. a QALY in the future is worth less to us now because of 'interest'
 or conversely we'd need more QALYs now to have a QALY further in the future.</p>
+<p>Formula used is
+ $$1/(1 + d)^{y}$$</p>
     
     </div>
 
@@ -136,16 +140,15 @@ or conversely we'd need more QALYs now to have a QALY further in the future.</p>
 
     <p>Discounted value for each time point up to <code>t_limit</code></p>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Formula used is
- $$ 1/(1 + discount_rate)^#years$$</p>
-    
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Severens, Johan L and Milne, Richard J,
 Value in Health, 4, Discounting Health Outcomes in Economic Evaluation : The Ongoing Debate,
 volume 7, 2004</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code>excess_lifetime</code> is the sum of discounted terms.</p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -164,9 +167,9 @@ volume 7, 2004</p>
       
       <li><a href="#value">Value</a></li>
 
-      <li><a href="#details">Details</a></li>
-
       <li><a href="#references">References</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

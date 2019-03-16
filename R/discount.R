@@ -1,18 +1,19 @@
 
-#' @title Discounted Values Over Time
+#' Discounted values over time
 #'
 #' @description Dscounted value, e.g. cost or health (QALY), for each time point, e.g. year.
 #' E.g. a QALY in the future is worth less to us now because of 'interest'
 #' or conversely we'd need more QALYs now to have a QALY further in the future.
 #'
-#' @details Formula used is
-#'  \deqn{ 1/(1 + discount_rate)^#years}
+#' Formula used is
+#'  \deqn{1/(1 + d)^{y}}
 #'
 #' @param discount_rate Discount factor, default at 3.5\%
 #' @param t_limit Time period (positive integer) to discount over starting from 1
 #'
 #' @return Discounted value for each time point up to \code{t_limit}
 #' @export
+#' @seealso \link{\code{excess_lifetime}} is the sum of discounted terms.
 #'
 #' @references
 #' Severens, Johan L and Milne, Richard J,

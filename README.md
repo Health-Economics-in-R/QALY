@@ -1,4 +1,6 @@
 
+# QALY <img src="imgfile.png" height="139" align="right"/>
+
 [![Build
 Status](https://travis-ci.org/n8thangreen/QALY.svg?branch=master)](https://travis-ci.org/n8thangreen/QALY)
 [![AppVeyor build
@@ -8,8 +10,6 @@ status](https://codecov.io/gh/n8thangreen/QALY/branch/master/graph/badge.svg)](h
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# QALY
 
 > A QALY is a QALY is a QALY
 

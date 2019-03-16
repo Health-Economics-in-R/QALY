@@ -46,6 +46,9 @@ This would be good to do though so that can always use latest version.
 ##TODO: webscraping? regular expressions?
 
 \deqn{(1 + i_{1})(1 + i_{2}) \cdots (1 + i_{n}) \times C}
+
+Clearly, for the same \code{i} each year this is simply
+\deqn{C(1 + i)^n}
 }
 \examples{
 from_year <- 2012

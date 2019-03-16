@@ -32,9 +32,8 @@
 
 <meta property="og:title" content="Calculate Quality-Adjusted Life Years — calc_QALY" />
 
-<meta property="og:description" content="Discounted total QALYs upto a defined time horizon.
-This is a simpler function.
-An alternative Method is also available (see total_QALYs)." />
+<meta property="og:description" content="Discounted total QALYs up to a defined time horizon.
+This is a simpler, alternative function. See S3 Method also available (total_QALYs)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -111,9 +110,8 @@ An alternative Method is also available (see total_QALYs)." />
 
     <div class="ref-description">
     
-    <p>Discounted total QALYs upto a defined time horizon.
-This is a simpler function.
-An alternative Method is also available (see <code><a href='total_QALYs.html'>total_QALYs</a></code>).</p>
+    <p>Discounted total QALYs up to a defined time horizon.
+This is a simpler, alternative function. See S3 Method also available (<code><a href='total_QALYs.html'>total_QALYs</a></code>).</p>
     
     </div>
 
@@ -129,7 +127,8 @@ An alternative Method is also available (see <code><a href='total_QALYs.html'>to
     </tr>
     <tr>
       <th>intervals</th>
-      <td><p>Time intervals for each utility</p></td>
+      <td><p>Time intervals for each utility, usually whole year i.e. 1. This is useful for fractions of years at the start and end of the period.
+However, since we may not know this then may not be necessary.</p></td>
     </tr>
     <tr>
       <th>age</th>
@@ -141,21 +140,19 @@ An alternative Method is also available (see <code><a href='total_QALYs.html'>to
     </tr>
     <tr>
       <th>discount_rate</th>
-      <td><p>default 3.5%</p></td>
+      <td><p>Default: 3.5% per year</p></td>
     </tr>
     <tr>
       <th>utility_method</th>
-      <td><p>Should the yearly QALYs be summed to a scalar? <code>add</code> or <code>prod</code></p></td>
+      <td><p>How to combine utilities. Default: <code>add</code>, or <code>prod</code></p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Uses the following formula, for year  <code>i</code>:</p>
-<p>$$ \sum prop_year(i) * utility(i) * QoL(age(i)) * discount_factor(i) $$</p>
+<p>$$ \sum interval(i) * utility(i) * QoL(age(i)) * discount(i) $$</p>
 <p>for  <code>i</code> = 1, ..., <code>time_horizon</code>.</p>
-<p><code>prop_year</code> is useful for fractions of years at the start and end of the period.
-However, since we may not know this then may not be necessary.</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -164,8 +161,7 @@ comparing QALY and DALY calculations, volume 21, 2006</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>calc_QALY_CFR</code>,
-         <code><a href='calc_QALY_population.html'>calc_QALY_population</a></code>
+    <div class='dont-index'><p><code><a href='calc_QALY_population.html'>calc_QALY_population</a></code>,
          <code><a href='total_QALYs.html'>total_QALYs</a></code></p></div>
     
 

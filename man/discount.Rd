@@ -2,7 +2,7 @@
 % Please edit documentation in R/discount.R
 \name{discount}
 \alias{discount}
-\title{Discounted Values Over Time}
+\title{Discounted values over time}
 \usage{
 discount(discount_rate = 0.035, t_limit = 100)
 }
@@ -18,10 +18,9 @@ Discounted value for each time point up to \code{t_limit}
 Dscounted value, e.g. cost or health (QALY), for each time point, e.g. year.
 E.g. a QALY in the future is worth less to us now because of 'interest'
 or conversely we'd need more QALYs now to have a QALY further in the future.
-}
-\details{
+
 Formula used is
- \deqn{ 1/(1 + discount_rate)^#years}
+ \deqn{1/(1 + d)^{y}}
 }
 \examples{
 
@@ -36,4 +35,7 @@ sum(utility * D)
 Severens, Johan L and Milne, Richard J,
 Value in Health, 4, Discounting Health Outcomes in Economic Evaluation : The Ongoing Debate,
 volume 7, 2004
+}
+\seealso{
+\link{\code{excess_lifetime}} is the sum of discounted terms.
 }

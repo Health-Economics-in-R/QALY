@@ -72,6 +72,10 @@
     
     
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+<div id="qaly" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
+<a href="#qaly" class="anchor"></a>QALY</h1></div>
 <blockquote>
 <p>A QALY is a QALY is a QALY</p>
 </blockquote>
@@ -96,10 +100,10 @@
 <h2 class="hasAnchor">
 <a href="#installing-qaly" class="anchor"></a>Installing QALY</h2>
 <p>To install the development version from github:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(devtools)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">install_github</span>(<span class="st">"n8thangreen/QALY"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(devtools)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">install_github</span>(<span class="st">"Health-Economics-in-R/QALY"</span>)</a></code></pre></div>
 <p>Then, to load the package, use:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(QALY)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(QALY)</a></code></pre></div>
 </div>
 <div id="motivation" class="section level2">
 <h2 class="hasAnchor">
@@ -110,23 +114,25 @@
 <div id="basic-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-example" class="anchor"></a>Basic example</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/message">suppressMessages</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(QALY))</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/message">suppressMessages</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(QALY))</a></code></pre></div>
+<pre><code>#&gt; Warning: package 'dplyr' was built under R version 3.4.4</code></pre>
+<pre><code>#&gt; Warning: package 'purrr' was built under R version 3.4.4</code></pre>
 <p>Combined two co-morbidity utilities using the product approach:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">HSUV_prod &lt;-<span class="st"> </span><span class="kw"><a href="reference/HSUV.html">HSUV</a></span>(<span class="dt">method =</span> <span class="st">"prod"</span>) </a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">tot_utility &lt;-<span class="st"> </span><span class="kw">HSUV_prod</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.9</span>, <span class="fl">0.8</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">HSUV_prod &lt;-<span class="st"> </span><span class="kw"><a href="reference/HSUV.html">HSUV</a></span>(<span class="dt">method =</span> <span class="st">"prod"</span>) </a>
+<a class="sourceLine" id="cb6-2" title="2">tot_utility &lt;-<span class="st"> </span><span class="kw">HSUV_prod</span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.9</span>, <span class="fl">0.8</span>))</a></code></pre></div>
 <p>TODO use expected remaining life time…</p>
 <p>Create a adjusted life-year type object which contains all the information needed to do subsequent operations:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">personHealthYears &lt;-</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw"><a href="reference/person_health_years.html">person_health_years</a></span>(</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">    <span class="dt">start_year =</span> <span class="dv">2016</span>,</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">    <span class="dt">end_year =</span> <span class="dv">2020</span>,</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">    <span class="dt">age =</span> <span class="dv">33</span>,</a>
-<a class="sourceLine" id="cb5-6" data-line-number="6">    <span class="dt">time_horizon =</span> <span class="ot">NA</span>,</a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">    <span class="dt">utility =</span> tot_utility,</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">    <span class="dt">discount_rate =</span> <span class="fl">0.035</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">personHealthYears &lt;-</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="st">  </span><span class="kw"><a href="reference/person_health_years.html">person_health_years</a></span>(</a>
+<a class="sourceLine" id="cb7-3" title="3">    <span class="dt">start_year =</span> <span class="dv">2016</span>,</a>
+<a class="sourceLine" id="cb7-4" title="4">    <span class="dt">end_year =</span> <span class="dv">2020</span>,</a>
+<a class="sourceLine" id="cb7-5" title="5">    <span class="dt">age =</span> <span class="dv">33</span>,</a>
+<a class="sourceLine" id="cb7-6" title="6">    <span class="dt">time_horizon =</span> <span class="ot">NA</span>,</a>
+<a class="sourceLine" id="cb7-7" title="7">    <span class="dt">utility =</span> tot_utility,</a>
+<a class="sourceLine" id="cb7-8" title="8">    <span class="dt">discount_rate =</span> <span class="fl">0.035</span>)</a></code></pre></div>
 <p>Calculate QALYS:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">HRQoL_year &lt;-<span class="st"> </span><span class="kw"><a href="reference/total_QALYs.html">total_QALYs</a></span>(personHealthYears)</a></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(HRQoL_year)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">HRQoL_year &lt;-<span class="st"> </span><span class="kw"><a href="reference/total_QALYs.html">total_QALYs</a></span>(personHealthYears)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(HRQoL_year)</a></code></pre></div>
 <pre><code>#&gt;   [1] 0.5900000 0.5700483 0.5507713 0.5321462        NA        NA        NA
 #&gt;   [8]        NA        NA        NA        NA        NA        NA        NA
 #&gt;  [15]        NA        NA        NA        NA        NA        NA        NA
@@ -180,11 +186,11 @@
 #&gt; 
 #&gt; attr(,"class")
 #&gt; [1] "person_health_years" "list"</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(HRQoL_year)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(HRQoL_year)</a></code></pre></div>
 <pre><code>#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
 #&gt;  0.5322  0.5461  0.5604  0.5607  0.5750  0.5900      96</code></pre>
 <p>Print a graph of the HRQoL over time: using ggplot2?</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(HRQoL_year)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(HRQoL_year)</a></code></pre></div>
 <p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="480"></p>
 <p>See package <a href="http://htmlpreview.github.io/?https://github.com/n8thangreen/QALY/blob/master/inst/doc/vignette_main.html">vignette</a> for more details and examples.</p>
 </div>
@@ -192,6 +198,7 @@
 <h2 class="hasAnchor">
 <a href="#license" class="anchor"></a>License</h2>
 <p>GPL-3 ©</p>
+</div>
 </div>
   </div>
 

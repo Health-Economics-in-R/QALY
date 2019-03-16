@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Health State Utility Value — HSUV • QALY</title>
+<title>Excess lifetime — excess_lifetime • QALY</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,11 @@
 
 
 
-<meta property="og:title" content="Health State Utility Value — HSUV" />
+<meta property="og:title" content="Excess lifetime — excess_lifetime" />
 
-<meta property="og:description" content="Utilities can be combined in different ways to give an overall utility." />
+<meta property="og:description" content="The difference between two future time points
+(the first of these can be trivially the present).
+Allows discounting of future times so that they are valued less than sooner times." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -102,64 +104,57 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Health State Utility Value</h1>
-    <small class="dont-index">Source: <a href='https://github.com/n8thangreen/QALY/blob/master/R/HSUV.R'><code>R/HSUV.R</code></a></small>
-    <div class="hidden name"><code>HSUV.Rd</code></div>
+    <h1>Excess lifetime</h1>
+    <small class="dont-index">Source: <a href='https://github.com/n8thangreen/QALY/blob/master/R/excess_lifetime.R'><code>R/excess_lifetime.R</code></a></small>
+    <div class="hidden name"><code>excess_lifetime.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Utilities can be combined in different ways to give an overall utility.</p>
+    <p>The difference between two future time points
+(the first of these can be trivially the present).
+Allows discounting of future times so that they are valued less than sooner times.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>HSUV</span>(<span class='no'>...</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"prod"</span>, <span class='st'>"add"</span>, <span class='st'>"min"</span>))</pre>
+    <pre class="usage"><span class='fu'>excess_lifetime</span>(<span class='no'>start</span>, <span class='no'>end</span>, <span class='kw'>discount</span> <span class='kw'>=</span> <span class='fl'>0.035</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>One or more utilities to combine</p></td>
+      <th>start</th>
+      <td><p>time</p></td>
     </tr>
     <tr>
-      <th>method</th>
-      <td><p>Options are:</p><ul>
-<li><p>Additive
-$$u^{add} = u_a + u_b - 1$$</p></li>
-<li><p>Multiplicative
-$$u^{mult} = u_a u_b$$</p></li>
-<li><p>Minimum
-$$u^{min} = \min{u_a, u_b}$$</p></li>
-</ul></td>
+      <th>end</th>
+      <td><p>time</p></td>
+    </tr>
+    <tr>
+      <th>discount</th>
+      <td><p>default: 0.035</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>function</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>TODO: Adjusted decrement estimator
-TODO: Combination model</p>
-    
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p><a href='http://nicedsu.org.uk/wp-content/uploads/2016/03/TSD12-Utilities-in-modelling-FINAL.pdf'>http://nicedsu.org.uk/wp-content/uploads/2016/03/TSD12-Utilities-in-modelling-FINAL.pdf</a></p>
+    <p>These are usually two years of death such that this (discounted) time
+is years of life lost due to illness.
+This is a component of the DALY calculation
+by including as a product with the probability of early death (p) and population size (N),
+i.e. DALY = YLD + YDD, such that
+YLD = N p t</p>
+<p>The later time to death is all-cause expected lifetime at a given age
+which can be obtained from life-tables e.g. from the ONS.</p>
+<p>The expanded sum is</p>
+<p>$$\frac{1}{d^{m+1}} + \cdots + \frac{1}{d^{n}}, n &gt; m$$</p>
+<p>Using a finite series identity this is</p>
+<p>$$\frac{1 - (1/d)^{n+1}}{1 - 1/d} - \frac{1 - (1/d)^{m+1}}{1 - 1/d}$$</p>
+<p>$$= \frac{(1/d)^{m+1} - (1/d)^{n+1}}{1 - 1/d}$$</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<span class='fu'>HSUV</span>(<span class='fl'>1</span>,<span class='fl'>1</span>)</div><div class='output co'>#&gt; function(...) {
-#&gt; 
-#&gt;     do.call(what = method, args = list(...))
-#&gt;   }
-#&gt; &lt;environment: 0x0000000025088da8&gt;</div><div class='input'><span class='fu'>HSUV</span>(<span class='fl'>1</span>,<span class='fl'>1</span>,<span class='fl'>2</span>)</div><div class='output co'>#&gt; function(...) {
-#&gt; 
-#&gt;     do.call(what = method, args = list(...))
-#&gt;   }
-#&gt; &lt;environment: 0x000000002502d9c0&gt;</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -167,11 +162,7 @@ TODO: Combination model</p>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#references">References</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

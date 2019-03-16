@@ -47,7 +47,7 @@ For use as input to the QALY (and DALY) functions.
 Want to provide set-up info in different ways but which gives us all the necessary information to go calc QALYs later.
 individual level data.
 Don’t need to supply all of these otherwise there would be redundancy and possible conflicts. E.g. time horizon can be got from start and end year.
-Need to calc QoL which is discounting due to age from start to end year.
+Need to calculate QoL which is discounting due to age from start to end year.
 }
 \examples{
 
