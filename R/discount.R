@@ -13,7 +13,7 @@
 #'
 #' @return Discounted value for each time point up to \code{t_limit}
 #' @export
-#' @seealso \link{\code{excess_lifetime}} is the sum of discounted terms.
+#' @seealso \code{\link{excess_lifetime}} is the sum of discounted terms.
 #'
 #' @references
 #' Severens, Johan L and Milne, Richard J,

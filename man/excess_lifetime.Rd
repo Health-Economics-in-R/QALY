@@ -15,7 +15,7 @@ excess_lifetime(start, end, discount = 0.035)
 }
 \description{
 The difference between two future time points
-(the first of these can be trivially the present).
+(the first of these can be, trivially, the present).
 Allows discounting of future times so that they are valued less than sooner times.
 }
 \details{
@@ -24,7 +24,7 @@ is years of life lost due to illness.
 This is a component of the DALY calculation
 by including as a product with the probability of early death (p) and population size (N),
 i.e. DALY = YLD + YDD, such that
-YLD = N p t
+YLD = N x p x t
 
 The later time to death is all-cause expected lifetime at a given age
 which can be obtained from life-tables e.g. from the ONS.

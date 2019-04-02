@@ -37,5 +37,5 @@ Value in Health, 4, Discounting Health Outcomes in Economic Evaluation : The Ong
 volume 7, 2004
 }
 \seealso{
-\link{\code{excess_lifetime}} is the sum of discounted terms.
+\code{\link{excess_lifetime}} is the sum of discounted terms.
 }
