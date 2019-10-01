@@ -1,0 +1,44 @@
+reference:
+
+- title: QALY calculation set-up
+  desc:  ~
+  contents:
+  - '`person_health_years`'
+  - '`HSUV`'
+
+- title: QALY-based calculations
+  desc:  ~
+  contents:
+  - '`calc_QALY`'
+  - '`calc_QALY_population`'
+  - '`QALY_survival`'
+  - '`QoL_by_age`'
+  - '`total_QALYs`'
+
+- title: Cost-based functions
+  desc:  ~
+  contents:
+  - '`annual_inflation_HCHS`'
+  - '`GDP_deflators`'
+  - '`inflation_adjust_cost`'
+
+- title: Helper functions
+  desc:  ~
+  contents:
+  - '`lifetable`'
+  - '`make_discount`'
+  - '`condition`'
+  - '`discount`'
+  - '`excess_lifetime`'
+  - '`expand_utilities`'
+  - '`fillin_trailing_utilities`'
+  - '`fillin_utilities`'
+  - '`forbidden_negative_error`'
+
+- title: Outputs
+  desc: Printing and plotting
+  contents:
+  - '`plot.HRQoL`'
+  - '`plot_lexis.person_health_years`'
+  - '`print.HRQoL`'
+
