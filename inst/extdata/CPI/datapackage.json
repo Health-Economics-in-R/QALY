@@ -1,0 +1,30 @@
+{
+  "name": "data",
+  "resources": [
+    {
+      "path": "data/CPIH_2007-2018.csv",
+      "name": "CPI",
+      "schema": {
+        "fields": [
+          {
+            "name": "year",
+            "type": "integer",
+            "constraints": {
+              "minimum": 0
+            }
+          },
+          {
+            "name": "annual_change",
+            "type": "number",
+            "description": "Percent increase from previous year"
+          },
+          {
+            "name": "prop_change_from_prev_year",
+            "type": "number",
+            "description": "The proportion change from the previous year. annual_change as a fraction rather than a percent"
+          }
+        ]
+      }
+    }
+  ]
+}

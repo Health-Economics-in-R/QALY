@@ -4,7 +4,7 @@
 \alias{inflation_adjust_cost}
 \title{Calculate annual inflation adjusted costs}
 \usage{
-inflation_adjust_cost(from_year, to_year, from_cost, reference = NA,
+inflation_adjust_cost(from_year, to_year, from_cost,
   inflation_data = 0.035)
 }
 \arguments{
@@ -13,37 +13,30 @@ inflation_adjust_cost(from_year, to_year, from_cost, reference = NA,
 \item{to_year}{Date to convert cost to}
 
 \item{from_cost}{Cost at \code{from_year}}
-
-\item{reference}{Source of data (string)}
-
-\item{inflation_data}{NA default is fixed 3.5\% rate of inflation, \code{GDP_deflators}, \code{HCHS_pay} or \code{HCHS_price}.}
 }
 \value{
-Inflated cost (scalar), with attributes:
+Inflated (to) cost (scalar), with attributes used to generate the return value:
 \itemize{
   \item \code{from_year}
   \item \code{to_year}
   \item \code{from_cost}
-  \item \code{reference}
+  \item \code{reference} Which inflation adjustment dataset used.
  }
 }
 \description{
-Up to the present time inflated upwards.
+Up to a present time inflated upwards.
 }
 \details{
-Option to use the
+Option to use the following datasets:
 
 \itemize{
-  \item \url{https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/562750/GDP_Deflators_Qtrly_National_Accounts_September_2016_update_v2.csv}{ONS GDP_Deflators_Qtrly_National_Accounts}
+  \item \href{https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/562750/GDP_Deflators_Qtrly_National_Accounts_September_2016_update_v2.csv}{ONS GDP_Deflators_Qtrly_National_Accounts}
 (This document contains the latest gross domestic product (GDP) deflators.
 The GDP deflator can be viewed as a measure of general inflation in the domestic economy)
-  \item \url{https://www.pssru.ac.uk/pub/uc/uc2017/sources-of-information.pdf}{PSSRU annual inflation hospital and community health services}
- \item Fixed 3.5\%.
+  \item \href{https://www.pssru.ac.uk/pub/uc/uc2017/sources-of-information.pdf}{PSSRU annual inflation hospital and community health services (HCHS)}
+  \item \href{https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/consumerpriceinflation}{Consumer Price Inflation (CPI)}
+  \item Fixed 3.5\%.
 }
-
-Can't download directly into function because the .csv on the website is too messy as-is.
-This would be good to do though so that can always use latest version.
-##TODO: webscraping? regular expressions?
 
 \deqn{(1 + i_{1})(1 + i_{2}) \cdots (1 + i_{n}) \times C}
 
@@ -55,10 +48,6 @@ from_year <- 2012
 to_year <- 2015
 from_cost <- 96.140
 
-inflation_adjust_cost(from_year,
-                      to_year,
-                      from_cost,
-                      fixed = FALSE)
 #100
 
 inflation_adjust_cost(from_year = 2010,
@@ -66,5 +55,11 @@ inflation_adjust_cost(from_year = 2010,
                       from_cost = 1)
 #1.229255
 1*(1+0.035)^6
+
+inflation_adjust_cost(from_year = 2014,
+                      to_year = 2016,
+                      from_cost = 1,
+                      inflation_data = "CPI")
+1*1.004*1.01
 
 }

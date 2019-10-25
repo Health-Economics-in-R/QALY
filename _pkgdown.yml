@@ -18,14 +18,11 @@ reference:
 - title: Cost-based functions
   desc:  ~
   contents:
-  - '`annual_inflation_HCHS`'
-  - '`GDP_deflators`'
   - '`inflation_adjust_cost`'
 
 - title: Helper functions
   desc:  ~
   contents:
-  - '`lifetable`'
   - '`make_discount`'
   - '`condition`'
   - '`discount`'
@@ -42,3 +39,10 @@ reference:
   - '`plot_lexis.person_health_years`'
   - '`print.HRQoL`'
 
+- title: Data
+  desc:  ~
+  contents:
+  - '`annual_inflation_HCHS`'
+  - '`annual_inflation_CPI`'
+  - '`GDP_deflators`'
+  - '`lifetable`'

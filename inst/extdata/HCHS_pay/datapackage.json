@@ -2,21 +2,26 @@
   "name": "data",
   "resources": [
     {
-      "path": "data/HCHS_pay.csv",
+      "path": "data/HCHS_pay_2007-2018.csv",
       "name": "HCHS_pay",
       "schema": {
         "fields": [
           {
             "name": "year",
-            "type": "integer"
+            "type": "integer",
+            "constraints": {
+              "minimum": 0
+            }
           },
           {
             "name": "HCHS_pay",
-            "type": "number"
+            "type": "number",
+            "description": "Percent increase from previous year"
           },
           {
             "name": "prop_change_from_prev_year",
-            "type": "number"
+            "type": "number",
+            "description": "The proportion change from the previous year. HCHS_pay as a fraction rather than a percent"
           }
         ]
       }
