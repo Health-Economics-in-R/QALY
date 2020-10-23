@@ -31,6 +31,8 @@ Request welcome; please use
   - Other HSUV methods
   - Improved plotting
 
+> :warning: This package is in development so is not assured to work.
+
 ## Installing QALY
 
 To install the development version from github:
