@@ -38,6 +38,7 @@ Request welcome; please use [Issues](https://github.com/n8thangreen/QALY/issues)
 - Other HSUV methods
 - Improved plotting
 
+> :warning: This package is in development so is not assured to work.
 
 ## Installing QALY
 
